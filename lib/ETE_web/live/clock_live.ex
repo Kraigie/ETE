@@ -1,4 +1,4 @@
-defmodule LiveViewDemoWeb.ClockLive do
+defmodule ETEWeb.ClockLive do
   use Phoenix.LiveView
   import Calendar.Strftime
 

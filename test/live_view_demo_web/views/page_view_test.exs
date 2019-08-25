@@ -1,3 +1,3 @@
-defmodule LiveViewDemoWeb.PageViewTest do
-  use LiveViewDemoWeb.ConnCase, async: true
+defmodule ETEWeb.PageViewTest do
+  use ETEWeb.ConnCase, async: true
 end

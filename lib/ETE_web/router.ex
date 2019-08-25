@@ -1,5 +1,5 @@
-defmodule LiveViewDemoWeb.Router do
-  use LiveViewDemoWeb, :router
+defmodule ETEWeb.Router do
+  use ETEWeb, :router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -14,7 +14,7 @@ defmodule LiveViewDemoWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", LiveViewDemoWeb do
+  scope "/", ETEWeb do
     pipe_through :browser
 
     get "/", PageController, :index
@@ -22,7 +22,7 @@ defmodule LiveViewDemoWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", LiveViewDemoWeb do
+  # scope "/api", ETEWeb do
   #   pipe_through :api
   # end
 end

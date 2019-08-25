@@ -1,5 +1,5 @@
-defmodule LiveViewDemoWeb.PageControllerTest do
-  use LiveViewDemoWeb.ConnCase
+defmodule ETEWeb.PageControllerTest do
+  use ETEWeb.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get(conn, "/")
