@@ -11,9 +11,8 @@ defmodule ETE.Application do
       # Start the Ecto repository
       # ETE.Repo,
       # Start the endpoint when the application starts
-      ETEWeb.Endpoint
-      # Starts a worker by calling: ETE.Worker.start_link(arg)
-      # {ETE.Worker, arg},
+      ETEWeb.Endpoint,
+      {ETE.Game.Server, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
