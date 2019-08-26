@@ -7,7 +7,7 @@ defmodule ETE.Game.World do
     %__MODULE__{entities: %Entities{}}
   end
 
-  def add_player(%__MODULE__{entities: entities} =  world, player_id) do
+  def add_player(%__MODULE__{entities: entities} = world, player_id) do
     new_entities = Entities.add_player(entities, player_id)
     %{world | entities: new_entities}
   end

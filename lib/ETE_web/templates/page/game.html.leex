@@ -1,0 +1,5 @@
+<div phx-keydown="move_player" phx-target="window">
+  <%= for {id, entity} <- @world.entities.players do %>
+    <div style='position: absolute; height: 5vh; width: 5vw; left: <%= entity.x_pos %>vw; top: <%= entity.y_pos %>vh; border: solid thin'></div>
+  <% end %>
+</div>

@@ -14,11 +14,11 @@ defmodule ETE.Game.Entities do
   end
 
   def move_player(%__MODULE__{} = entities, player_id, value) do
-    player = 
+    player =
       entities.players
       |> Map.get(player_id)
       |> Player.move_player(value)
-    
+
     players = Map.put(entities.players, player_id, player)
     %{entities | players: players}
   end
