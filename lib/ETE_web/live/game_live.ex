@@ -6,22 +6,51 @@ defmodule ETEWeb.GameLive do
   end
 
   def mount(_session, socket) do
-    if connected?(socket), do: :timer.send_interval(16, self(), :tick)
-    ETE.Game.Server.add_player(socket.id)
-    {:ok, put_date(socket)}
+    ETE.Game.Server.add_player(socket.id, self())
+    {:ok, put_world(socket)}
   end
 
-  def handle_info(:tick, socket) do
-    {:noreply, put_date(socket)}
+  def handle_info({:render, world}, socket) do
+    {:noreply, put_world(world, socket)}
   end
 
   def handle_event("move_player", "ArrowLeft", socket) do
-    ETE.Game.Server.move_player(socket.id, -1)
+    ETE.Game.Server.set_moving(socket.id, :left)
     {:noreply, socket}
   end
 
   def handle_event("move_player", "ArrowRight", socket) do
-    ETE.Game.Server.move_player(socket.id, 0.5)
+    ETE.Game.Server.set_moving(socket.id, :right)
+    {:noreply, socket}
+  end
+
+  def handle_event("move_player", "ArrowUp", socket) do
+    ETE.Game.Server.set_moving(socket.id, :up)
+    {:noreply, socket}
+  end
+
+  def handle_event("move_player", "ArrowDown", socket) do
+    ETE.Game.Server.set_moving(socket.id, :down)
+    {:noreply, socket}
+  end
+
+  def handle_event("stop_player", "ArrowLeft", socket) do
+    ETE.Game.Server.stop_moving(socket.id, :left)
+    {:noreply, socket}
+  end
+
+  def handle_event("stop_player", "ArrowRight", socket) do
+    ETE.Game.Server.stop_moving(socket.id, :right)
+    {:noreply, socket}
+  end
+
+  def handle_event("stop_player", "ArrowUp", socket) do
+    ETE.Game.Server.stop_moving(socket.id, :up)
+    {:noreply, socket}
+  end
+
+  def handle_event("stop_player", "ArrowDown", socket) do
+    ETE.Game.Server.stop_moving(socket.id, :down)
     {:noreply, socket}
   end
 
@@ -29,7 +58,15 @@ defmodule ETEWeb.GameLive do
     {:noreply, socket}
   end
 
-  defp put_date(socket) do
+  def handle_event("stop_player", _key, socket) do
+    {:noreply, socket}
+  end
+
+  defp put_world(socket) do
     assign(socket, world: ETE.Game.Server.get_world())
+  end
+
+  defp put_world(world, socket) do
+    assign(socket, world: world)
   end
 end

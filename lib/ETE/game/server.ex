@@ -6,15 +6,19 @@ defmodule ETE.Game.Server do
   @ms_per_tick 33
 
   def start_link(_default) do
-    GenServer.start_link(__MODULE__, %{world: World.new()}, name: __MODULE__)
+    GenServer.start_link(__MODULE__, %{world: World.new(), connected: []}, name: __MODULE__)
   end
 
-  def add_player(player_id) do
-    GenServer.cast(__MODULE__, {:add_player, player_id})
+  def add_player(player_id, socket) do
+    GenServer.cast(__MODULE__, {:add_player, player_id, socket})
   end
 
-  def move_player(player_id, value) do
-    GenServer.cast(__MODULE__, {:move_player, player_id, value})
+  def set_moving(player_id, orientation) do
+    GenServer.cast(__MODULE__, {:set_moving, player_id, orientation})
+  end
+
+  def stop_moving(player_id, orientation) do
+    GenServer.cast(__MODULE__, {:stop_player, player_id, orientation})
   end
 
   def get_world() do
@@ -35,19 +39,28 @@ defmodule ETE.Game.Server do
   @impl true
   def handle_info({:tick, time}, state) do
     world = World.next_tick(state.world)
+
+    for pid <- state.connected, do: send(pid, {:render, world})
     Process.send_after(self(), {:tick, time}, time)
+
     {:noreply, %{state | world: world}}
   end
 
   @impl true
-  def handle_cast({:add_player, player_id}, state) do
+  def handle_cast({:add_player, player_id, socket}, state) do
     world = World.add_player(state.world, player_id)
+    {:noreply, %{state | world: world, connected: [socket | state.connected]}}
+  end
+
+  @impl true
+  def handle_cast({:set_moving, player_id, orientation}, state) do
+    world = World.set_moving(state.world, player_id, orientation)
     {:noreply, %{state | world: world}}
   end
 
   @impl true
-  def handle_cast({:move_player, player_id, value}, state) do
-    world = World.move_player(state.world, player_id, value)
+  def handle_cast({:stop_player, player_id, orientation}, state) do
+    world = World.stop_player(state.world, player_id, orientation)
     {:noreply, %{state | world: world}}
   end
 
