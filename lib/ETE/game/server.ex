@@ -4,26 +4,26 @@ defmodule ETE.Game.Server do
   alias ETE.Game.World
 
   @ms_per_tick 16
+  @registry ETE.GameBrowser.Registry
 
-  def start_link(_default) do
-    GenServer.start_link(__MODULE__, %{world: World.new(), connected: []}, name: __MODULE__)
+  def start_link(game_id) do
+    GenServer.start_link(__MODULE__, %{world: World.new(), connected: [], id: game_id}, name: via_tuple(game_id))
   end
 
-  def add_player(player_id, socket) do
-    GenServer.cast(__MODULE__, {:add_player, player_id, socket})
+  def add_player(game_id, player_id, socket) do
+    GenServer.cast(via_tuple(game_id), {:add_player, player_id, socket})
   end
 
-  def set_moving(player_id, orientation) do
-    GenServer.cast(__MODULE__, {:set_moving, player_id, orientation})
+  def set_moving(game_id, player_id, orientation) do
+    GenServer.cast(via_tuple(game_id), {:set_moving, player_id, orientation})
   end
 
-  def stop_moving(player_id, orientation) do
-    GenServer.cast(__MODULE__, {:stop_player, player_id, orientation})
+  def stop_moving(game_id, player_id, orientation) do
+    GenServer.cast(via_tuple(game_id), {:stop_player, player_id, orientation})
   end
 
-  def get_world() do
-    GenServer.call(__MODULE__, :get_world)
-  end
+  def get_world(pid) when is_pid(pid), do: GenServer.call(pid, :get_world)
+  def get_world(id), do: GenServer.call(via_tuple(id), :get_world)
 
   @impl true
   def init(state) do
@@ -68,4 +68,6 @@ defmodule ETE.Game.Server do
   def handle_call(:get_world, _from, state) do
     {:reply, state.world, state}
   end
+
+  defp via_tuple(id), do: {:via, Registry, {@registry, id}}
 end

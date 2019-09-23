@@ -1,0 +1,16 @@
+<%= for world <- @games do %>
+  <canvas 
+    phx-click="test"
+    phx-target="window"
+    data-world="<%= Jason.encode! world %>"
+    phx-hook="canvasMini"
+    height="<%= world.height / 5 %>"
+    width="<%= world.width / 5 %>"
+    style="border: thin solid"
+  >
+    Canvas is not supported!
+  </canvas>
+
+<% end %>
+
+<button phx-click="create_new_game">New Game</button>

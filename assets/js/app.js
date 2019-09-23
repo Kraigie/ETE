@@ -20,17 +20,40 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 
 let hooks = {
-  canvas: {
+  canvasMini: {
     mounted() {
       let canvas = this.el;
       let ctx = canvas.getContext("2d");
-
-      console.log("mounted");
       
       Object.assign(this, { canvas, ctx });
     },
     updated() {
-      console.log("updated");
+      let { canvas, ctx } = this;
+      
+      let world = JSON.parse(canvas.dataset.world);
+      let players = world.players
+      console.log(world);
+
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      for(let player in players) {
+        let x = players[player].x / 5
+        let y = players[player].y / 5
+        let width = players[player].width / 5
+        let height = players[player].height / 5
+        
+        ctx.fillRect(x, y, width, height)
+      }
+    }
+  },
+  canvas: {
+    mounted() {
+      let canvas = this.el;
+      let ctx = canvas.getContext("2d");
+      
+      Object.assign(this, { canvas, ctx });
+    },
+    updated() {
       let { canvas, ctx } = this;
       
       let world = JSON.parse(canvas.dataset.world);
@@ -47,25 +70,6 @@ let hooks = {
         
         ctx.fillRect(x, y, width, height)
       }
-      
-      /*
-      let halfHeight = canvas.height / 2;
-      let halfWidth = canvas.width / 2;
-      let smallerHalf = Math.min(halfHeight, halfWidth);
-      
-      
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "rgba(128, 0, 255, 1)";
-      ctx.beginPath();
-      ctx.arc(
-        halfWidth,
-        halfHeight,
-        smallerHalf / 16,
-        0,
-        2 * Math.PI
-      );
-      ctx.fill();
-      */
     }
   }
 };

@@ -2,12 +2,17 @@ defmodule ETEWeb.GameLive do
   use Phoenix.LiveView
 
   def render(assigns) do
-    ETEWeb.PageView.render("game.html", assigns)
+    ETEWeb.GameView.render("game.html", assigns)
   end
 
   def mount(_session, socket) do
-    ETE.Game.Server.add_player(socket.id, self())
-    {:ok, put_world(socket)}
+    {:ok, socket}
+  end
+
+  def handle_params(%{"id" => game_id, "new" => test}, _uri, socket) do
+    ETE.Game.Server.add_player(game_id, socket.id, self())
+    socket = assign(socket, game_id: game_id)
+    {:noreply, put_world(game_id, socket)}
   end
 
   def handle_info({:render, world}, socket) do
@@ -16,14 +21,14 @@ defmodule ETEWeb.GameLive do
 
   def handle_event("move_player", code_map, socket) do
     dir = dir_from_code(code_map)
-    if dir, do: ETE.Game.Server.set_moving(socket.id, dir)
+    if dir, do: ETE.Game.Server.set_moving(socket.assigns.game_id, socket.id, dir)
 
     {:noreply, socket}
   end
 
   def handle_event("stop_player", code_map, socket) do
     dir = dir_from_code(code_map)
-    if dir, do: ETE.Game.Server.stop_moving(socket.id, dir)
+    if dir, do: ETE.Game.Server.stop_moving(socket.assigns.game_id, socket.id, dir)
 
     {:noreply, socket}
   end
@@ -38,11 +43,11 @@ defmodule ETEWeb.GameLive do
   def dir_from_code(%{"code" => "ArrowRight"}), do: :right
   def dir_from_code(_), do: :nil
 
-  defp put_world(socket) do
-    assign(socket, world: ETE.Game.Server.get_world())
+  defp put_world(id, socket) when is_binary(id) do
+    assign(socket, world: ETE.Game.Server.get_world(id))
   end
 
-  defp put_world(world, socket) do
+  defp put_world(world, socket) when is_map(world) do
     assign(socket, world: world)
   end
 end

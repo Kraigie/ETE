@@ -12,12 +12,13 @@ defmodule ETE.Application do
       # ETE.Repo,
       # Start the endpoint when the application starts
       ETEWeb.Endpoint,
-      {ETE.Game.Server, []}
+      {ETE.GameBrowser.Supervisor, strategy: :one_for_one},
+      {Registry, keys: :unique, name: ETE.GameBrowser.Registry}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: ETE.Supervisor]
+    opts = [strategy: :one_for_all, name: ETE.Supervisor]
     Supervisor.start_link(children, opts)
   end
 

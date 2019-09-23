@@ -1,8 +1,8 @@
 defmodule ETE.Game.World do
   alias ETE.Game.Player
 
-  @width 1000
-  @height 600
+  @width 1200
+  @height 900
 
   @derive Jason.Encoder 
   defstruct players: %{}, entities: [], height: @height, width: @width
