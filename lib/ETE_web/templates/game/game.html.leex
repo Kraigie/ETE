@@ -1,0 +1,11 @@
+<canvas 
+  phx-keydown="move_player" 
+  phx-keyup="stop_player"
+  phx-target="window"
+  data-world="<%= Jason.encode! @world %>"
+  phx-hook="canvas"
+  height="<%= @world.height %>"
+  width="<%= @world.width %>"
+>
+  Canvas is not supported!
+</canvas>

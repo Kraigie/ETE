@@ -17,7 +17,7 @@ defmodule ETEWeb.Router do
   scope "/", ETEWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    get "/", GameController, :index
     live "/game", GameLive
   end
 

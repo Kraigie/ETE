@@ -3,7 +3,7 @@ defmodule ETE.Game.Server do
 
   alias ETE.Game.World
 
-  @ms_per_tick 33
+  @ms_per_tick 16
 
   def start_link(_default) do
     GenServer.start_link(__MODULE__, %{world: World.new(), connected: []}, name: __MODULE__)

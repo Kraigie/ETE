@@ -14,53 +14,29 @@ defmodule ETEWeb.GameLive do
     {:noreply, put_world(world, socket)}
   end
 
-  def handle_event("move_player", "ArrowLeft", socket) do
-    ETE.Game.Server.set_moving(socket.id, :left)
+  def handle_event("move_player", code_map, socket) do
+    dir = dir_from_code(code_map)
+    if dir, do: ETE.Game.Server.set_moving(socket.id, dir)
+
     {:noreply, socket}
   end
 
-  def handle_event("move_player", "ArrowRight", socket) do
-    ETE.Game.Server.set_moving(socket.id, :right)
+  def handle_event("stop_player", code_map, socket) do
+    dir = dir_from_code(code_map)
+    if dir, do: ETE.Game.Server.stop_moving(socket.id, dir)
+
     {:noreply, socket}
   end
 
-  def handle_event("move_player", "ArrowUp", socket) do
-    ETE.Game.Server.set_moving(socket.id, :up)
+  def handle_event(_command, _key, socket) do
     {:noreply, socket}
   end
 
-  def handle_event("move_player", "ArrowDown", socket) do
-    ETE.Game.Server.set_moving(socket.id, :down)
-    {:noreply, socket}
-  end
-
-  def handle_event("stop_player", "ArrowLeft", socket) do
-    ETE.Game.Server.stop_moving(socket.id, :left)
-    {:noreply, socket}
-  end
-
-  def handle_event("stop_player", "ArrowRight", socket) do
-    ETE.Game.Server.stop_moving(socket.id, :right)
-    {:noreply, socket}
-  end
-
-  def handle_event("stop_player", "ArrowUp", socket) do
-    ETE.Game.Server.stop_moving(socket.id, :up)
-    {:noreply, socket}
-  end
-
-  def handle_event("stop_player", "ArrowDown", socket) do
-    ETE.Game.Server.stop_moving(socket.id, :down)
-    {:noreply, socket}
-  end
-
-  def handle_event("move_player", _key, socket) do
-    {:noreply, socket}
-  end
-
-  def handle_event("stop_player", _key, socket) do
-    {:noreply, socket}
-  end
+  def dir_from_code(%{"code" => "ArrowUp"}), do: :up
+  def dir_from_code(%{"code" => "ArrowDown"}), do: :down
+  def dir_from_code(%{"code" => "ArrowLeft"}), do: :left
+  def dir_from_code(%{"code" => "ArrowRight"}), do: :right
+  def dir_from_code(_), do: :nil
 
   defp put_world(socket) do
     assign(socket, world: ETE.Game.Server.get_world())

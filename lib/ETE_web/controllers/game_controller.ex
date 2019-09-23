@@ -1,4 +1,4 @@
-defmodule ETEWeb.PageController do
+defmodule ETEWeb.GameController do
   use ETEWeb, :controller
 
   def index(conn, _params) do

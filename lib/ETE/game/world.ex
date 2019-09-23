@@ -1,16 +1,20 @@
 defmodule ETE.Game.World do
   alias ETE.Game.Player
 
-  defstruct players: %{}, entities: []
+  @width 1000
+  @height 600
+
+  @derive Jason.Encoder 
+  defstruct players: %{}, entities: [], height: @height, width: @width
 
   def new() do
     %__MODULE__{}
   end
 
   def add_player(%__MODULE__{players: players} = world, player_id) do
-    x_pos = Enum.random(5..95)
+    x_pos = Enum.random(Player.default_width()..@width)
     y_pos = 0
-    player = %Player{x_pos: x_pos, y_pos: y_pos}
+    player = %Player{x: x_pos, y: y_pos}
 
     players = Map.put(players, player_id, player)
 

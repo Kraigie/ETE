@@ -1,49 +1,44 @@
 defmodule ETE.Game.Player do
-  defstruct x_pos: 0, y_pos: 0, height: 5, width: 5, speed: 0.5, direction: {nil, nil}
 
-  def set_moving(%__MODULE__{direction: dir} = player, orientation)
-      when orientation in [:left, :right] do
-    direction = put_elem(dir, 0, orientation)
-    %{player | direction: direction}
+  @height 20
+  @width 20
+
+  @derive Jason.Encoder
+  defstruct x: 0, y: 0, height: @height, width: @width, vx: 0, vy: 0, speed: 5 
+
+  def set_moving(%__MODULE__{speed: speed} = player, orientation) do
+    case orientation do
+      :up -> %{player | vy: -speed}
+      :down -> %{player | vy: speed}
+      :left -> %{player | vx: -speed}
+      :right -> %{player | vx: speed}
+    end
   end
 
-  def set_moving(%__MODULE__{direction: dir} = player, orientation)
-      when orientation in [:up, :down] do
-    direction = put_elem(dir, 1, orientation)
-    %{player | direction: direction}
-  end
-
-  def stop_moving(%__MODULE__{direction: dir} = player, orientation)
-      when orientation in [:left, :right] do
-    direction = put_elem(dir, 0, nil)
-    %{player | direction: direction}
-  end
-
-  def stop_moving(%__MODULE__{direction: dir} = player, orientation)
-      when orientation in [:up, :down] do
-    direction = put_elem(dir, 1, nil)
-    %{player | direction: direction}
+  def stop_moving(%__MODULE__{} = player, orientation) do
+    case orientation do
+      :up -> %{player | vy: 0}
+      :down -> %{player | vy: 0}
+      :left -> %{player | vx: 0}
+      :right -> %{player | vx: 0}
+    end
   end
 
   def move_player(%__MODULE__{} = player) do
-    player
-    |> move_x()
-    |> move_y()
+    move(player)
   end
 
-  defp move_x(%__MODULE__{x_pos: x_pos, speed: speed, direction: {x, _}} = player) do
-    case x do
-      :left -> %{player | x_pos: x_pos - speed}
-      :right -> %{player | x_pos: x_pos + speed}
-      :nil -> player
-    end
+  def move(%__MODULE__{x: x, y: y, vx: vx, vy: vy} = player) do
+    x = x + vx
+    y = y + vy
+    %{player | x: x, y: y}
   end
 
-  defp move_y(%__MODULE__{y_pos: y_pos, speed: speed, direction: {_, y}} = player) do
-    case y do
-      :up -> %{player | y_pos: y_pos + speed}
-      :down -> %{player | y_pos: y_pos - speed}
-      :nil -> player
-    end
+  def default_width do
+    @width
+  end
+
+  def default_height do
+    @height
   end
 end
