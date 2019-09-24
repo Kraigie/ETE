@@ -1,10 +1,9 @@
 defmodule ETE.Game.Player do
-
   @height 20
   @width 20
 
   @derive Jason.Encoder
-  defstruct x: 0, y: 0, height: @height, width: @width, vx: 0, vy: 0, speed: 5 
+  defstruct x: 0, y: 0, height: @height, width: @width, vx: 0, vy: 0, speed: 5
 
   def set_moving(%__MODULE__{speed: speed} = player, orientation) do
     case orientation do

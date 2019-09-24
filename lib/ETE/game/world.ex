@@ -4,16 +4,16 @@ defmodule ETE.Game.World do
   @width 1200
   @height 900
 
-  @derive Jason.Encoder 
-  defstruct players: %{}, entities: [], height: @height, width: @width
+  @derive Jason.Encoder
+  defstruct players: %{}, entities: [], height: @height, width: @width, game_id: nil
 
-  def new() do
-    %__MODULE__{}
+  def new(game_id) do
+    %__MODULE__{game_id: game_id}
   end
 
   def add_player(%__MODULE__{players: players} = world, player_id) do
     x_pos = Enum.random(Player.default_width()..@width)
-    y_pos = 0
+    y_pos = Enum.random(Player.default_height()..@height)
     player = %Player{x: x_pos, y: y_pos}
 
     players = Map.put(players, player_id, player)
@@ -44,7 +44,9 @@ defmodule ETE.Game.World do
   end
 
   def next_tick(%__MODULE__{players: players} = world) do
-    players = Enum.reduce(players, %{}, fn {id, p}, acc -> Map.put(acc, id, Player.move_player(p)) end)
+    players =
+      Enum.reduce(players, %{}, fn {id, p}, acc -> Map.put(acc, id, Player.move_player(p)) end)
+
     %{world | players: players}
   end
 end

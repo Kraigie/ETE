@@ -7,7 +7,9 @@ defmodule ETE.Game.Server do
   @registry ETE.GameBrowser.Registry
 
   def start_link(game_id) do
-    GenServer.start_link(__MODULE__, %{world: World.new(), connected: [], id: game_id}, name: via_tuple(game_id))
+    GenServer.start_link(__MODULE__, %{world: World.new(game_id), connected: []},
+      name: via_tuple(game_id)
+    )
   end
 
   def add_player(game_id, player_id, socket) do

@@ -19,6 +19,6 @@ defmodule ETE.GameBrowser.Supervisor do
   def list_children() do
     __MODULE__
     |> DynamicSupervisor.which_children()
-    |> Enum.map(fn {_, pid, _, _} -> pid end) 
+    |> Enum.map(fn {_, pid, _, _} -> pid end)
   end
 end

@@ -25,15 +25,26 @@ let hooks = {
       let canvas = this.el;
       let ctx = canvas.getContext("2d");
       
+      let world = JSON.parse(canvas.dataset.world);
+      let players = world.players;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      for(let player in players) {
+        let x = players[player].x / 5
+        let y = players[player].y / 5
+        let width = players[player].width / 5
+        let height = players[player].height / 5
+        
+        ctx.fillRect(x, y, width, height)
+      }
+
       Object.assign(this, { canvas, ctx });
     },
     updated() {
       let { canvas, ctx } = this;
       
       let world = JSON.parse(canvas.dataset.world);
-      let players = world.players
-      console.log(world);
-
+      let players = world.players;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       for(let player in players) {
@@ -51,6 +62,19 @@ let hooks = {
       let canvas = this.el;
       let ctx = canvas.getContext("2d");
       
+      let world = JSON.parse(canvas.dataset.world);
+      let players = world.players;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      for(let player in players) {
+        let x = players[player].x
+        let y = players[player].y
+        let width = players[player].width
+        let height = players[player].height
+        
+        ctx.fillRect(x, y, width, height)
+      }
+
       Object.assign(this, { canvas, ctx });
     },
     updated() {
@@ -58,8 +82,6 @@ let hooks = {
       
       let world = JSON.parse(canvas.dataset.world);
       let players = world.players
-      console.log(world);
-
 
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       for(let player in players) {

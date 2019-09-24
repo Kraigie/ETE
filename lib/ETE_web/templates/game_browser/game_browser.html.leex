@@ -1,7 +1,8 @@
 <%= for world <- @games do %>
   <canvas 
-    phx-click="test"
+    phx-click="join_game"
     phx-target="window"
+    phx-value-id="<%= world.game_id %>"
     data-world="<%= Jason.encode! world %>"
     phx-hook="canvasMini"
     height="<%= world.height / 5 %>"

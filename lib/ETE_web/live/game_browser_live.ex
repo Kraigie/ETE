@@ -14,10 +14,10 @@ defmodule ETEWeb.GameBrowserLive do
 
   def mount(_session, socket) do
     ETEWeb.Endpoint.subscribe(@topic)
-    
-    worlds = 
+
+    worlds =
       Supervisor.list_children()
-      |> Enum.map(fn pid -> Server.get_world(pid) end) 
+      |> Enum.map(fn pid -> Server.get_world(pid) end)
 
     Process.send_after(self(), {:tick, @tick}, @tick)
 
@@ -25,11 +25,11 @@ defmodule ETEWeb.GameBrowserLive do
   end
 
   def handle_info({:tick, time}, socket) do
-    Process.send_after(self(), {:tick, time}, time)
-    
-    worlds = 
+    worlds =
       Supervisor.list_children()
-      |> Enum.map(fn pid -> Server.get_world(pid) end) 
+      |> Enum.map(fn pid -> Server.get_world(pid) end)
+
+    Process.send_after(self(), {:tick, time}, time)
 
     {:noreply, assign(socket, games: worlds)}
   end
@@ -38,10 +38,16 @@ defmodule ETEWeb.GameBrowserLive do
     {:noreply, assign(socket, games: [Server.get_world(p.id) | socket.assigns.games])}
   end
 
+  def handle_event("join_game", %{"id" => id}, socket) do
+    {:noreply, live_redirect(socket, to: Routes.live_path(socket, ETEWeb.GameLive, id))}
+  end
+
   def handle_event("create_new_game", _value, socket) do
-    id = Ecto.UUID.generate
+    id = Ecto.UUID.generate()
+
     Supervisor.start_child(id)
     ETEWeb.Endpoint.broadcast_from(self(), @topic, "add_game", %{id: id})
-    {:noreply, live_redirect(socket, to: Routes.live_path(socket, ETEWeb.GameLive, id, new: true))}
+
+    {:noreply, live_redirect(socket, to: Routes.live_path(socket, ETEWeb.GameLive, id))}
   end
 end

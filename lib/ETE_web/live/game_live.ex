@@ -9,7 +9,7 @@ defmodule ETEWeb.GameLive do
     {:ok, socket}
   end
 
-  def handle_params(%{"id" => game_id, "new" => test}, _uri, socket) do
+  def handle_params(%{"id" => game_id}, _uri, socket) do
     ETE.Game.Server.add_player(game_id, socket.id, self())
     socket = assign(socket, game_id: game_id)
     {:noreply, put_world(game_id, socket)}
@@ -41,7 +41,7 @@ defmodule ETEWeb.GameLive do
   def dir_from_code(%{"code" => "ArrowDown"}), do: :down
   def dir_from_code(%{"code" => "ArrowLeft"}), do: :left
   def dir_from_code(%{"code" => "ArrowRight"}), do: :right
-  def dir_from_code(_), do: :nil
+  def dir_from_code(_), do: nil
 
   defp put_world(id, socket) when is_binary(id) do
     assign(socket, world: ETE.Game.Server.get_world(id))
