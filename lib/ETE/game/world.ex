@@ -21,6 +21,11 @@ defmodule ETE.Game.World do
     %{world | players: players}
   end
 
+  def remove_player(%__MODULE__{players: players} = world, player_id) do
+    {_, players} = Map.pop(players, player_id)
+    %{world | players: players}
+  end
+
   def set_moving(%__MODULE__{players: players} = world, player_id, orientation) do
     player =
       players

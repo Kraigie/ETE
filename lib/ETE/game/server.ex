@@ -1,5 +1,5 @@
 defmodule ETE.Game.Server do
-  use GenServer
+  use GenServer, restart: :temporary
 
   alias ETE.Game.World
 
@@ -7,13 +7,13 @@ defmodule ETE.Game.Server do
   @registry ETE.GameBrowser.Registry
 
   def start_link(game_id) do
-    GenServer.start_link(__MODULE__, %{world: World.new(game_id), connected: []},
+    GenServer.start_link(__MODULE__, %{world: World.new(game_id), connected: %{}},
       name: via_tuple(game_id)
     )
   end
 
-  def add_player(game_id, player_id, socket) do
-    GenServer.cast(via_tuple(game_id), {:add_player, player_id, socket})
+  def add_player(game_id, player_id, view_pid) do
+    GenServer.cast(via_tuple(game_id), {:add_player, player_id, view_pid})
   end
 
   def set_moving(game_id, player_id, orientation) do
@@ -42,16 +42,30 @@ defmodule ETE.Game.Server do
   def handle_info({:tick, time}, state) do
     world = World.next_tick(state.world)
 
-    for pid <- state.connected, do: send(pid, {:render, world})
+    for {pid, _id} <- state.connected, do: send(pid, {:render, world})
     Process.send_after(self(), {:tick, time}, time)
 
     {:noreply, %{state | world: world}}
   end
 
+  def handle_info({:DOWN, _ref, :process, pid, _reason}, state) do
+    {popped, connected} = Map.pop(state.connected, pid)
+    world = World.remove_player(state.world, popped)
+
+    if map_size(connected) <= 0 do
+      {:stop, :shutdown, state}
+    else
+      {:noreply, %{state | connected: connected, world: world}}
+    end
+  end
+
   @impl true
-  def handle_cast({:add_player, player_id, socket}, state) do
+  def handle_cast({:add_player, player_id, view_pid}, state) do
     world = World.add_player(state.world, player_id)
-    {:noreply, %{state | world: world, connected: [socket | state.connected]}}
+
+    Process.monitor(view_pid)
+
+    {:noreply, %{state | world: world, connected: Map.put(state.connected, view_pid, player_id)}}
   end
 
   @impl true
