@@ -1,6 +1,8 @@
 defmodule ETEWeb.GameLive do
   use Phoenix.LiveView
 
+  @registry ETE.GameBrowser.Registry
+
   def render(assigns) do
     ETEWeb.GameView.render("game.html", assigns)
   end
@@ -10,9 +12,14 @@ defmodule ETEWeb.GameLive do
   end
 
   def handle_params(%{"id" => game_id}, _uri, socket) do
-    ETE.Game.Server.add_player(game_id, socket.id, self())
-    socket = assign(socket, game_id: game_id)
-    {:noreply, put_world(game_id, socket)}
+    # 404 if the game server does not exist
+    if Registry.lookup(@registry, game_id) == [] do
+      {:noreply, live_redirect(socket, to: "/404.html")}
+    else
+      ETE.Game.Server.add_player(game_id, socket.id, self())
+      socket = assign(socket, game_id: game_id)
+      {:noreply, put_world(game_id, socket)}
+    end
   end
 
   def handle_info({:render, world}, socket) do
