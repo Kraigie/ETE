@@ -4,6 +4,11 @@ This is my entry in [Phoenix Phrenzy](https://phoenixphrenzy.com), showing off w
 
 ![App Name Here preview](assets/static/images/preview.gif "App Name Here")
 
+# Attributions
+All pictures of the kittens were taken by me, and edited by Andris#2694 on Discord.
+
+The vector of the mouse is part of the public domain. It was found [here](https://publicdomainvectors.org/en/free-clipart/Vector-drawing-of-mouse-with-pink-ears/22307.html) on publicdomainvectors.org which is located [here](https://publicdomainvectors.org/).
+
 # Phrenzy Instructions
 
 Fork this repo and start build an application! See [Phoenix Phrenzy](https://phoenixphrenzy.com) for details.
