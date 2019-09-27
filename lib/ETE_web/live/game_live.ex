@@ -3,29 +3,40 @@ defmodule ETEWeb.GameLive do
 
   @registry ETE.GameBrowser.Registry
 
+  @impl true
   def render(assigns) do
     ETEWeb.GameView.render("game.html", assigns)
   end
 
+  @impl true
   def mount(_session, socket) do
     {:ok, socket}
   end
 
+  @impl true
   def handle_params(%{"id" => game_id}, _uri, socket) do
-    # 404 if the game server does not exist
+    # Handle unknown game ids
     if Registry.lookup(@registry, game_id) == [] do
-      {:noreply, live_redirect(socket, to: "/404.html")}
+      {:noreply, live_redirect(socket, to: "/404")}
     else
+      # Don't add player here, instead show modal to select character
       ETE.Game.Server.add_player(game_id, socket.id, self())
       socket = assign(socket, game_id: game_id)
       {:noreply, put_world(game_id, socket)}
     end
   end
 
+  @impl true
   def handle_info({:render, world}, socket) do
     {:noreply, put_world(world, socket)}
   end
 
+  @impl true
+  def handle_event("add_player", _event, socket) do
+    # Add player to world here, close modal
+  end
+
+  @impl true
   def handle_event("move_player", code_map, socket) do
     dir = dir_from_code(code_map)
     if dir, do: ETE.Game.Server.set_moving(socket.assigns.game_id, socket.id, dir)
@@ -33,6 +44,7 @@ defmodule ETEWeb.GameLive do
     {:noreply, socket}
   end
 
+  @impl true
   def handle_event("stop_player", code_map, socket) do
     dir = dir_from_code(code_map)
     if dir, do: ETE.Game.Server.stop_moving(socket.assigns.game_id, socket.id, dir)
@@ -40,6 +52,7 @@ defmodule ETEWeb.GameLive do
     {:noreply, socket}
   end
 
+  @impl true
   def handle_event(_command, _key, socket) do
     {:noreply, socket}
   end

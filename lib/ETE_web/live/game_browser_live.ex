@@ -6,15 +6,12 @@ defmodule ETEWeb.GameBrowserLive do
   alias ETEWeb.Router.Helpers, as: Routes
 
   @tick 33
-  @topic "games"
 
   def render(assigns) do
     ETEWeb.GameBrowserView.render("game_browser.html", assigns)
   end
 
   def mount(_session, socket) do
-    ETEWeb.Endpoint.subscribe(@topic)
-
     worlds =
       Supervisor.list_children()
       |> Enum.map(fn pid -> Server.get_world(pid) end)
@@ -34,7 +31,7 @@ defmodule ETEWeb.GameBrowserLive do
     {:noreply, assign(socket, games: worlds)}
   end
 
-  def handle_info(%{topic: @topic, event: "add_game", payload: p}, socket) do
+  def handle_info(%{event: "add_game", payload: p}, socket) do
     {:noreply, assign(socket, games: [Server.get_world(p.id) | socket.assigns.games])}
   end
 
@@ -46,7 +43,6 @@ defmodule ETEWeb.GameBrowserLive do
     id = Ecto.UUID.generate()
 
     Supervisor.start_child(id)
-    ETEWeb.Endpoint.broadcast_from(self(), @topic, "add_game", %{id: id})
 
     {:noreply, live_redirect(socket, to: Routes.live_path(socket, ETEWeb.GameLive, id))}
   end

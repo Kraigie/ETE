@@ -14,7 +14,7 @@ defmodule ETEWeb.ErrorView do
   # "Not Found".
 
   defp random_cat() do
-    {k, v} = Enum.random(Cat.get_cat_map())
+    {_k, v} = Enum.random(Cat.get_cat_map())
     v
   end
 

@@ -17,8 +17,9 @@ defmodule ETEWeb.Router do
   scope "/", ETEWeb do
     pipe_through :browser
 
+    get "/404", GameLiveController, :show
     live "/", GameBrowserLive
-    live "/game/:id", GameLive
+    live "/:id", GameLive
   end
 
   # Other scopes may use custom stacks.

@@ -5,6 +5,7 @@ defmodule ETE.Game.Server do
 
   @ms_per_tick 16
   @registry ETE.GameBrowser.Registry
+  @shutdown_timeout 5000
 
   def start_link(game_id) do
     GenServer.start_link(__MODULE__, %{world: World.new(game_id), connected: %{}},
@@ -48,15 +49,19 @@ defmodule ETE.Game.Server do
     {:noreply, %{state | world: world}}
   end
 
+  @impl true
   def handle_info({:DOWN, _ref, :process, pid, _reason}, state) do
     {popped, connected} = Map.pop(state.connected, pid)
     world = World.remove_player(state.world, popped)
 
-    if map_size(connected) <= 0 do
-      {:stop, :shutdown, state}
-    else
-      {:noreply, %{state | connected: connected, world: world}}
-    end
+    if map_size(connected) <= 0, do: Process.send_after(self(), :stop, @shutdown_timeout)
+
+    {:noreply, %{state | connected: connected, world: world}}
+  end
+
+  @impl true
+  def handle_info(:stop, %{connected: connected} = state) do
+    if map_size(connected) <= 0, do: {:stop, :shutdown, state}, else: {:noreply, state}
   end
 
   @impl true

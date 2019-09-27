@@ -1,23 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>ETE | Enjoy the End</title>
-    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
-  </head>
-  <body>
-    <header>
-      ETE
-    </header>
-    <main role="main" class="container">
-      <figure style="vertical-align: top; display: block; text-align: center;">
-        <% cat = random_cat() %>
-        <img src="/images/<%=cat.img%>">
-        <figcaption style="display: block;"><%= cat.about %></figcaption>
-      </figure>
-    </main>
-    <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
-  </body>
-</html>
+<figure style="vertical-align: top; display: block; text-align: center;">
+  <% cat = random_cat() %>
+  <img src="/images/<%=cat.img%>">
+  <figcaption style="display: block;"><%= cat.about %></figcaption>
+</figure>

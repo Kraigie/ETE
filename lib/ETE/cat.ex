@@ -6,7 +6,8 @@ defmodule ETE.Cat do
       name: "Harold"
     },
     hazel: %{
-      about: "Doesn't like other cats... or people that much. Used to live with Harold and she's much happier he is gone.",
+      about:
+        "Doesn't like other cats... or people that much. Used to live with Harold and she's much happier he is gone.",
       img: "hazel.png",
       name: "Hazel"
     },
@@ -21,7 +22,8 @@ defmodule ETE.Cat do
       name: "Karen"
     },
     kitty: %{
-      about: "He lays down when he eats, consumes his weight in food every day, and has the most annoying meow. He's my favorite",
+      about:
+        "He lays down when he eats, consumes his weight in food every day, and has the most annoying meow. He's my favorite",
       img: "kitty.png",
       name: "Kitty"
     },
@@ -31,7 +33,8 @@ defmodule ETE.Cat do
       name: "Lucy"
     },
     miz: %{
-      about: "Hellion that everyone loves to hate. Recently escaped. Please come back Miz I miss you.",
+      about:
+        "Hellion that everyone loves to hate. Recently escaped. Please come back Miz I miss you.",
       img: "miz.png",
       name: "Miz"
     },
@@ -51,7 +54,7 @@ defmodule ETE.Cat do
       name: "Red"
     },
     red_cone: %{
-      about: "Post surgery to remove his boy parts. He says he didn't need them anyways",
+      about: "Post surgery to remove his boy parts. He says he didn't need them anyways.",
       img: "red_cone.png",
       name: "Red"
     }
