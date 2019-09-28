@@ -63,3 +63,7 @@
   height: 115%;
   width: 115%;
 }
+
+canvas {
+  border: solid thin;
+}

@@ -37,7 +37,7 @@ defmodule ETEWeb.GameLive do
   end
 
   @impl true
-  def handle_event("close_modal", event, socket) do
+  def handle_event("close_modal", _event, socket) do
     {:noreply, assign(socket, show_modal: false)}
   end
 

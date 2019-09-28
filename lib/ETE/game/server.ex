@@ -77,7 +77,6 @@ defmodule ETE.Game.Server do
   @impl true
   def handle_cast({:add_player, player_id}, state) do
     world = World.add_player(state.world, player_id)
-
     {:noreply, %{state | world: world}}
   end
 

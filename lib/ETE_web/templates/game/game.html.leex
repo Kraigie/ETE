@@ -22,7 +22,7 @@
       <% end %> 
     </div>
     <div class="modal-footer">
-      Name: <input placeholder="Name your kitty" value="<%= if @selected_cat, do: String.capitalize(@selected_cat) %>">
+      Name: <input placeholder="Name your kitty" value="<%= if @selected_cat, do: String.capitalize(ETE.Cat.get_cat_map()[@selected_cat].name) %>">
       <button phx-click="add_player">Join</button>
     </div>
   </div>
