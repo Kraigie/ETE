@@ -13,8 +13,12 @@ defmodule ETE.Game.Server do
     )
   end
 
-  def add_player(game_id, player_id, view_pid) do
-    GenServer.cast(via_tuple(game_id), {:add_player, player_id, view_pid})
+  def add_connected(game_id, player_id, view_pid) do
+    GenServer.cast(via_tuple(game_id), {:add_connected, player_id, view_pid})
+  end
+
+  def add_player(game_id, player_id) do
+    GenServer.cast(via_tuple(game_id), {:add_player, player_id})
   end
 
   def set_moving(game_id, player_id, orientation) do
@@ -65,12 +69,16 @@ defmodule ETE.Game.Server do
   end
 
   @impl true
-  def handle_cast({:add_player, player_id, view_pid}, state) do
+  def handle_cast({:add_connected, player_id, view_pid}, state) do
+    Process.monitor(view_pid)
+    {:noreply, %{state | connected: Map.put(state.connected, view_pid, player_id)}}
+  end
+
+  @impl true
+  def handle_cast({:add_player, player_id}, state) do
     world = World.add_player(state.world, player_id)
 
-    Process.monitor(view_pid)
-
-    {:noreply, %{state | world: world, connected: Map.put(state.connected, view_pid, player_id)}}
+    {:noreply, %{state | world: world}}
   end
 
   @impl true

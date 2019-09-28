@@ -1,5 +1,5 @@
 .modal {
-  display: block; /* Hidden by default */
+  display: block; /* Shown by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
   left: 0;
@@ -9,6 +9,10 @@
   overflow: auto; /* Enable scroll if needed */
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-header {
+  text-align: center;
 }
 
 /* Modal Content/Box */
@@ -33,4 +37,29 @@
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+.cat-selected {
+  height: 115%;
+  width: 115%;
+  background: greenyellow
+}
+
+.cat-info-selected {
+  display: block;
+  text-align: center;
+}
+
+.cat-info {
+  display: none;
+  text-align: center;
+}
+
+.cat:hover .cat-info {
+  display: block;
+}
+
+.cat:hover {
+  height: 115%;
+  width: 115%;
 }

@@ -1,4 +1,33 @@
-
+<%= if @show_modal do %>
+<div class="modal" id="gameModal" phx-hook="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Pick your character</h2>
+    </div>
+    <div class="modal-body" style="display: flex;">
+      <%= for {key, cat} <- ETE.Cat.get_cat_map() do %>
+        <%= if key == @selected_cat do %>
+          <div phx-click="select_cat" class="cat-selected" phx-value-selected_cat="<%= key %>">
+            <img src="/images/<%=cat.img%>">
+            <p class="cat-info-selected"><%= cat.name %></p>
+            <p class="cat-info-selected"><%= cat.about %></p>
+          </div>
+        <% else %>
+          <div phx-click="select_cat" class="cat" phx-value-selected_cat="<%= key %>">
+            <img src="/images/<%=cat.img%>">
+            <p class="cat-info"><%= cat.name %></p>
+            <p class="cat-info"><%= cat.about %></p>
+          </div>
+        <% end %>
+      <% end %> 
+    </div>
+    <div class="modal-footer">
+      Name: <input placeholder="Name your kitty" value="<%= if @selected_cat, do: String.capitalize(@selected_cat) %>">
+      <button phx-click="add_player">Join</button>
+    </div>
+  </div>
+</div>
+<% end %>
 
 <canvas 
   phx-keydown="move_player" 

@@ -20,6 +20,15 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 
 let hooks = {
+  modal: {
+    mounted() {
+      window.onclick = (event) => {
+        if (event.target == document.getElementById("gameModal")) {
+          this.pushEvent("close_modal", event)
+        }
+      }
+    }
+  },
   canvasMini: {
     mounted() {
       let canvas = this.el;

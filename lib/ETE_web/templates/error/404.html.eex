@@ -1,5 +1,5 @@
 <figure style="vertical-align: top; display: block; text-align: center;">
-  <% cat = random_cat() %>
+  <% {_k, cat} = Enum.random(ETE.Cat.get_cat_map()) %>
   <img src="/images/<%=cat.img%>">
   <figcaption style="display: block;"><%= cat.about %></figcaption>
 </figure>
