@@ -55,15 +55,23 @@ let hooks = {
       let world = JSON.parse(canvas.dataset.world);
       let players = world.players;
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      for(let player in players) {
-        let x = players[player].x / 5
-        let y = players[player].y / 5
-        let width = players[player].width / 5
-        let height = players[player].height / 5
-        
-        ctx.fillRect(x, y, width, height)
+      if (this.animationFrameRequest) {
+        cancelAnimationFrame(this.animationFrameRequest);
       }
+
+      this.animationFrameRequest = requestAnimationFrame(() => {
+        this.animationFrameRequest = undefined;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        for(let player in players) {
+          let x = players[player].x / 5
+          let y = players[player].y / 5
+          let width = players[player].width / 5
+          let height = players[player].height / 5
+
+          ctx.fillRect(x, y, width, height)
+        }
+      });
     }
   },
   canvas: {
@@ -92,15 +100,23 @@ let hooks = {
       let world = JSON.parse(canvas.dataset.world);
       let players = world.players
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      for(let player in players) {
-        let x = players[player].x
-        let y = players[player].y
-        let width = players[player].width
-        let height = players[player].height
-        
-        ctx.fillRect(x, y, width, height)
+      if (this.animationFrameRequest) {
+        cancelAnimationFrame(this.animationFrameRequest);
       }
+
+      this.animationFrameRequest = requestAnimationFrame(() => {
+        this.animationFrameRequest = undefined;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        for(let player in players) {
+          let x = players[player].x
+          let y = players[player].y
+          let width = players[player].width
+          let height = players[player].height
+
+          ctx.fillRect(x, y, width, height)
+        }
+      });
     }
   }
 };
