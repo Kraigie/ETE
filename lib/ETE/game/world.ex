@@ -35,28 +35,37 @@ defmodule ETE.Game.World do
   end
 
   def set_moving(%__MODULE__{players: players} = world, player_id, orientation) do
-    player =
-      players
-      |> Map.get(player_id)
-      |> Entity.set_moving(orientation)
+    player = Map.get(players, player_id)
 
-    players = Map.put(players, player_id, player)
-
-    %{world | players: players}
+    if player do
+      players = Map.put(players, player_id, Entity.set_moving(player, orientation))
+      %{world | players: players}
+    else
+      world
+    end
   end
 
   def stop_player(%__MODULE__{players: players} = world, player_id, orientation) do
-    player =
-      players
-      |> Map.get(player_id)
-      |> Entity.stop_moving(orientation)
+    player = Map.get(players, player_id)
 
-    players = Map.put(players, player_id, player)
-
-    %{world | players: players}
+    if player do
+      players = Map.put(players, player_id, Entity.stop_moving(player, orientation))
+      %{world | players: players}
+    else
+      world
+    end
   end
 
   def toggle_hitboxes(%__MODULE__{players: players} = world, player_id) do
+    player = Map.get(players, player_id)
+
+    if player do
+      players = Map.put(players, player_id, Entity.toggle_hitbox(player))
+      %{world | players: players}
+    else
+      world
+    end
+
     player =
       players
       |> Map.get(player_id)
@@ -72,6 +81,7 @@ defmodule ETE.Game.World do
       world
       |> move_players()
       |> move_entities()
+      |> handle_collisions()
       |> create_new_entities()
       |> update_tick()
 
@@ -83,6 +93,24 @@ defmodule ETE.Game.World do
       Enum.reduce(players, %{}, fn {id, p}, acc -> Map.put(acc, id, Entity.move_player(p)) end)
 
     %{world | players: players}
+  end
+
+  def handle_collisions(%__MODULE__{entities: entities, players: players} = world) do
+    dead =
+      for {_entity_id, entity} <- entities, {player_id, player} <- players do
+        if overlaps?(entity, player) do
+          player_id
+        end
+      end
+
+    players = Map.drop(players, dead)
+
+    %{world | players: players}
+  end
+
+  def overlaps?(rect1, rect2) do
+    !(rect1.x + rect1.width < rect2.x or rect2.x + rect2.width < rect1.x or
+        rect1.y + rect1.height < rect2.y or rect2.y + rect2.height < rect1.y)
   end
 
   defp move_entities(%__MODULE__{entities: entities} = world) do

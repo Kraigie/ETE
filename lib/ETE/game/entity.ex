@@ -52,7 +52,7 @@ defmodule ETE.Game.Entity do
   end
 
   def toggle_hitbox(%__MODULE__{show_hitboxes: show} = player) do
-    %{player | show_hitboxes: !player.show_hitboxes}
+    %{player | show_hitboxes: !show}
   end
 
   def default_width do

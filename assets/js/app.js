@@ -50,13 +50,14 @@ function draw(canvas, ctx, size) {
   let world = JSON.parse(canvas.dataset.world);
   let player_id = canvas.dataset.id;
   let players = world.players;
+
   let entities = world.entities;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   
   if(size == "big"){
-    doEntityDrawsBig(ctx, players, players[player_id].show_hitboxes);
-    doEntityDrawsBig(ctx, entities, players[player_id].show_hitboxes)
+    doEntityDrawsBig(ctx, players, players[player_id] ? players[player_id].show_hitboxes : false);
+    doEntityDrawsBig(ctx, entities, players[player_id] ? players[player_id].show_hitboxes : false)
   }
   else {
     doEntityDrawsSmall(ctx, players);
