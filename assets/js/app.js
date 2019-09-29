@@ -20,15 +20,6 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 
 let hooks = {
-  modal: {
-    mounted() {
-      window.onclick = (event) => {
-        if (event.target == document.getElementById("gameModal")) {
-          this.pushEvent("close_modal", event)
-        }
-      }
-    }
-  },
   canvasMini: {
     mounted() {
       let canvas = this.el;
@@ -44,7 +35,8 @@ let hooks = {
         let width = players[player].width / 5
         let height = players[player].height / 5
         
-        ctx.fillRect(x, y, width, height)
+        ctx.arc(x, y, width, 0, 2 * Math.PI);
+        ctx.stroke();
       }
 
       Object.assign(this, { canvas, ctx });
@@ -64,12 +56,13 @@ let hooks = {
 
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         for(let player in players) {
-          let x = players[player].x / 5
-          let y = players[player].y / 5
-          let width = players[player].width / 5
-          let height = players[player].height / 5
+          let x = players[player].x / 3
+          let y = players[player].y / 3
+          let width = players[player].width / 3
+          let height = players[player].height / 3
 
-          ctx.fillRect(x, y, width, height)
+          ctx.arc(x, y, width, 0, 2 * Math.PI);
+          ctx.stroke();
         }
       });
     }
@@ -89,7 +82,8 @@ let hooks = {
         let width = players[player].width
         let height = players[player].height
         
-        ctx.fillRect(x, y, width, height)
+        ctx.arc(x, y, width, 0, 2 * Math.PI);
+        ctx.stroke();
       }
 
       Object.assign(this, { canvas, ctx });
@@ -114,7 +108,8 @@ let hooks = {
           let width = players[player].width
           let height = players[player].height
 
-          ctx.fillRect(x, y, width, height)
+          ctx.arc(x, y, width, 0, 2 * Math.PI)
+          ctx.stroke();
         }
       });
     }

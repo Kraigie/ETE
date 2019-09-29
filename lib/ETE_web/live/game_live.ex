@@ -10,7 +10,7 @@ defmodule ETEWeb.GameLive do
 
   @impl true
   def mount(_session, socket) do
-    {:ok, assign(socket, selected_cat: nil)}
+    {:ok, socket}
   end
 
   @impl true
@@ -20,11 +20,10 @@ defmodule ETEWeb.GameLive do
       {:noreply, live_redirect(socket, to: "/404")}
     else
       ETE.Game.Server.add_connected(game_id, socket.id, self())
-
       socket =
         socket
         |> assign(game_id: game_id)
-        |> assign(show_modal: true)
+        |> assign(show_picker: true)
         |> put_world(game_id)
 
       {:noreply, socket}
@@ -37,22 +36,12 @@ defmodule ETEWeb.GameLive do
   end
 
   @impl true
-  def handle_event("close_modal", _event, socket) do
-    {:noreply, assign(socket, show_modal: false)}
-  end
-
-  @impl true
-  def handle_event("select_cat", %{"selected_cat" => cat}, socket) do
-    {:noreply, assign(socket, selected_cat: cat)}
-  end
-
-  @impl true
   def handle_event("add_player", _event, socket) do
     ETE.Game.Server.add_player(socket.assigns.game_id, socket.id)
 
     socket =
       socket
-      |> assign(show_modal: false)
+      |> assign(show_picker: false)
       |> put_world(socket.assigns.game_id)
 
     {:noreply, socket}

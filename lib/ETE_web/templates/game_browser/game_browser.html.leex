@@ -1,17 +1,32 @@
-<%= for world <- @games do %>
-  <canvas 
-    phx-click="join_game"
-    phx-target="window"
-    phx-value-id="<%= world.game_id %>"
-    data-world="<%= Jason.encode! world %>"
-    phx-hook="canvasMini"
-    height="<%= world.height / 5 %>"
-    width="<%= world.width / 5 %>"
-    style="border: thin solid"
-  >
-    Canvas is not supported!
-  </canvas>
-
+<div class="row">
+  <h1 class="center-align z-depth-1">
+    ETE
+  </h1>
+</div>
+<%= for {world, index} <- Enum.with_index(@games) do %>
+  <%= if rem(index, 3) == 0 do %>
+    <div class="row">
+  <% end %>
+      <div class="col s4">
+        <div class="z-depth-2" >
+          <canvas
+            style="height: 100%; width: 100%;"
+            phx-click="join_game"
+            phx-target="window"
+            phx-value-id="<%= world.game_id %>"
+            data-world="<%= Jason.encode! world %>"
+            phx-hook="canvasMini"
+            width="<%= world.width / 3 %>"
+            height="<%= world.height / 3 %>"
+          >
+            Canvas is not supported!
+          </canvas>
+        </div>
+      </div>
+  <%= if rem(index, 3) == 2 do %>
+    </div>
+  <% end %>
 <% end %>
 
-<button phx-click="create_new_game">New Game</button>
+<button class="btn" phx-click="create_new_game">New Game</button>
+</div>

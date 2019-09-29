@@ -1,42 +1,58 @@
-<%= if @show_modal do %>
-<div class="modal" id="gameModal" phx-hook="modal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h2>Pick your character</h2>
-    </div>
-    <div class="modal-body" style="display: flex;">
-      <%= for {key, cat} <- ETE.Cat.get_cat_map() do %>
-        <%= if key == @selected_cat do %>
-          <div phx-click="select_cat" class="cat-selected" phx-value-selected_cat="<%= key %>">
+<%= if @show_picker do %>
+  <div class="row valign-wrapper">
+    <h1>Choose your fighter</h1>
+  </div>
+  <div class="row">
+    <%= for {key, cat} <- ETE.Cat.get_cat_map() do %>
+      <div class="col s3">
+        <div class="card large teal">
+          <div class="card-image grey">
             <img src="/images/<%=cat.img%>">
-            <p class="cat-info-selected"><%= cat.name %></p>
-            <p class="cat-info-selected"><%= cat.about %></p>
+            <span class="card-title"><%= cat.name %></span>
           </div>
-        <% else %>
-          <div phx-click="select_cat" class="cat" phx-value-selected_cat="<%= key %>">
-            <img src="/images/<%=cat.img%>">
-            <p class="cat-info"><%= cat.name %></p>
-            <p class="cat-info"><%= cat.about %></p>
+          <div class="card-content teal">
+            <%= cat.about %>
           </div>
-        <% end %>
-      <% end %> 
+          <div class="card-action">
+            <a phx-click="add_player" class="cat" phx-value-selected_cat="<%= key %>" href="#">Pick Me!</a>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="row" style="margin: 5%">
+    <div class="col s7">
+      <canvas 
+      class="z-depth-3"
+      style="width: 100%; height: 100%;"
+      phx-keydown="move_player" 
+      phx-keyup="stop_player"
+      phx-target="window"
+      data-world="<%= Jason.encode! @world %>"
+      phx-hook="canvas"
+      height="<%= @world.height %>"
+      width="<%= @world.width %>"
+      >
+        Canvas is not supported!
+      </canvas>
     </div>
-    <div class="modal-footer">
-      Name: <input placeholder="Name your kitty" value="<%= if @selected_cat, do: String.capitalize(ETE.Cat.get_cat_map()[@selected_cat].name) %>">
-      <button phx-click="add_player">Join</button>
+    <div class="col s5">
+      <div class="row">
+        <div class="col s12">
+          <button class="z-depth-1 btn">Hello world</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <button class="z-depth-1 btn">Hello world</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <button class="z-depth-1 btn">Hello world</button>
+        </div>
+      </div>
     </div>
   </div>
-</div>
 <% end %>
-
-<canvas 
-  phx-keydown="move_player" 
-  phx-keyup="stop_player"
-  phx-target="window"
-  data-world="<%= Jason.encode! @world %>"
-  phx-hook="canvas"
-  height="<%= @world.height %>"
-  width="<%= @world.width %>"
->
-  Canvas is not supported!
-</canvas>

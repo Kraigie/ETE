@@ -28,7 +28,7 @@ defmodule ETE.Cat do
       name: "Kitty"
     },
     "lucy" => %{
-      about: "A dog.",
+      about: "A dog. Lucy is your girl if you don't want to play; she just likes to watch too.",
       img: "lucy.png",
       name: "Lucy"
     },
