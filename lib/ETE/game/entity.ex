@@ -1,4 +1,4 @@
-defmodule ETE.Game.Player do
+defmodule ETE.Game.Entity do
   @height 50
   @width 50
 
@@ -35,6 +35,12 @@ defmodule ETE.Game.Player do
     x = x + vx
     y = y + vy
     %{player | x: x, y: y}
+  end
+
+  def move_entity(%__MODULE__{x: x, y: y, vx: vx, vy: vy} = entity) do
+    x = x + vx
+    y = y + vy
+    %{entity | x: x, y: y}
   end
 
   def default_width do

@@ -19,31 +19,40 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 
-function drawBig(canvas, ctx) {
-  let world = JSON.parse(canvas.dataset.world);
-  let players = world.players
-
-  ctx.clearRect(0, 0, canvas.width, canvas.height)
-  for(let player in players) {
-    let x = players[player].x
-    let y = players[player].y
-    let width = players[player].width
-    let height = players[player].height
-    ctx.drawImage(catMap[players[player].avatar], x - width * .25, y - height * .25, height * 1.5, width * 1.5)
+function doEntityDrawsBig(ctx, entities) {
+  for(let entity in entities) {
+    let x = entities[entity].x;
+    let y = entities[entity].y;
+    let width = entities[entity].width;
+    let height = entities[entity].height;
+    ctx.drawImage(catMap[entities[entity].avatar], x - width * .25, y - height * .25, height * 1.5, width * 1.5);
   }
 }
 
-function drawSmall(canvas, ctx) {
-  let world = JSON.parse(canvas.dataset.world);
-  let players = world.players
+function doEntityDrawsSmall(ctx, entities) {
+  for(let entity in entities) {
+    let x = entities[entity].x / 4;
+    let y = entities[entity].y / 4;
+    let width = entities[entity].width / 4;
+    let height = entities[entity].height / 4;
+    ctx.drawImage(catMap[entities[entity].avatar], x - width * .25, y - height * .25, height * 1.5, width * 1.5);
+  }
+}
 
-  ctx.clearRect(0, 0, canvas.width, canvas.height)
-  for(let player in players) {
-    let x = players[player].x / 4
-    let y = players[player].y / 4
-    let width = players[player].width / 4
-    let height = players[player].height / 4
-    ctx.drawImage(catMap[players[player].avatar], x - width * .25, y - height * .25, height * 1.5, width * 1.5)
+function draw(canvas, ctx, size) {
+  let world = JSON.parse(canvas.dataset.world);
+  let players = world.players;
+  let entities = world.entities;
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  if(size == "big"){
+    doEntityDrawsBig(ctx, players);
+    doEntityDrawsBig(ctx, entities);
+  }
+  else {
+    doEntityDrawsSmall(ctx, players);
+    doEntityDrawsSmall(ctx, entities);
   }
 }
 
@@ -53,11 +62,7 @@ let hooks = {
       let canvas = this.el;
       let ctx = canvas.getContext("2d");
 
-      if (this.animationFrameRequest) {
-        cancelAnimationFrame(this.animationFrameRequest);
-      }
-
-      drawSmall(canvas, ctx);
+      draw(canvas, ctx, "small");
 
       Object.assign(this, { canvas, ctx });
     },
@@ -70,7 +75,7 @@ let hooks = {
 
       this.animationFrameRequest = requestAnimationFrame(() => {
         this.animationFrameRequest = undefined;
-        drawSmall(canvas, ctx);
+        draw(canvas, ctx, "small");
       });
     }
   },
@@ -78,8 +83,8 @@ let hooks = {
     mounted() {
       let canvas = this.el;
       let ctx = canvas.getContext("2d");
-      
-      drawBig(canvas, ctx);
+
+      draw(canvas, ctx, "big");
 
       Object.assign(this, { canvas, ctx });
     },
@@ -92,7 +97,7 @@ let hooks = {
 
       this.animationFrameRequest = requestAnimationFrame(() => {
         this.animationFrameRequest = undefined;
-        drawBig(canvas, ctx)
+        draw(canvas, ctx, "big");
       });
     }
   }

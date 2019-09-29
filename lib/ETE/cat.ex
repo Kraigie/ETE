@@ -1,4 +1,6 @@
 defmodule ETE.Cat do
+  @bad_girl "lucy"
+
   @cats %{
     "harold" => %{
       about: "Kinda ugly but kinda cute? Moved out recently.",
@@ -62,5 +64,9 @@ defmodule ETE.Cat do
 
   def get_cat_map() do
     @cats
+  end
+
+  def get_bad_girl() do
+    {@bad_girl, Map.fetch!(@cats, @bad_girl)}
   end
 end
