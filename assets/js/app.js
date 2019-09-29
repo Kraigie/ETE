@@ -19,13 +19,20 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 
-function doEntityDrawsBig(ctx, entities) {
+function doEntityDrawsBig(ctx, entities, show) {
+  
   for(let entity in entities) {
     let x = entities[entity].x;
     let y = entities[entity].y;
     let width = entities[entity].width;
     let height = entities[entity].height;
+
     ctx.drawImage(catMap[entities[entity].avatar], x - width * .25, y - height * .25, height * 1.5, width * 1.5);
+    if(show) {
+      ctx.beginPath();
+      ctx.rect(x, y, width, height);
+      ctx.stroke();
+    }
   }
 }
 
@@ -41,14 +48,15 @@ function doEntityDrawsSmall(ctx, entities) {
 
 function draw(canvas, ctx, size) {
   let world = JSON.parse(canvas.dataset.world);
+  let player_id = canvas.dataset.id;
   let players = world.players;
   let entities = world.entities;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   
   if(size == "big"){
-    doEntityDrawsBig(ctx, players);
-    doEntityDrawsBig(ctx, entities);
+    doEntityDrawsBig(ctx, players, players[player_id].show_hitboxes);
+    doEntityDrawsBig(ctx, entities, players[player_id].show_hitboxes)
   }
   else {
     doEntityDrawsSmall(ctx, players);

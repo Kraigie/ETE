@@ -25,6 +25,7 @@ defmodule ETEWeb.GameLive do
         socket
         |> assign(game_id: game_id)
         |> assign(show_picker: true)
+        |> assign(player_id: socket.id)
         |> put_world(game_id)
 
       {:noreply, socket}
@@ -60,6 +61,13 @@ defmodule ETEWeb.GameLive do
   def handle_event("stop_player", code_map, socket) do
     dir = dir_from_code(code_map)
     if dir, do: ETE.Game.Server.stop_moving(socket.assigns.game_id, socket.id, dir)
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("toggle_hitboxes", _, socket) do
+    ETE.Game.Server.toggle_hitboxes(socket.assigns.game_id, socket.id)
 
     {:noreply, socket}
   end

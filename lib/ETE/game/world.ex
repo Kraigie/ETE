@@ -4,7 +4,7 @@ defmodule ETE.Game.World do
 
   @width 800
   @height 800
-  @max_entity_speed 15
+  @max_entity_speed 10
 
   @derive Jason.Encoder
   defstruct players: %{},
@@ -56,7 +56,18 @@ defmodule ETE.Game.World do
     %{world | players: players}
   end
 
-  def next_tick(%__MODULE__{players: players} = world) do
+  def toggle_hitboxes(%__MODULE__{players: players} = world, player_id) do
+    player =
+      players
+      |> Map.get(player_id)
+      |> Entity.toggle_hitbox()
+
+    players = Map.put(players, player_id, player)
+
+    %{world | players: players}
+  end
+
+  def next_tick(%__MODULE__{} = world) do
     world =
       world
       |> move_players()
@@ -89,21 +100,25 @@ defmodule ETE.Game.World do
     %{world | entities: entities}
   end
 
+  defp pos(x), do: x
+  defp neg(x), do: x * -1
+  defp pos_or_neg(x), do: if(:rand.uniform() >= 0.5, do: x * -1, else: x)
+
   defp create_new_entities(%__MODULE__{entities: entities} = world) do
     if map_size(entities) < 4 do
       side = Enum.random([:top, :left, :right, :bottom])
       position = :rand.uniform()
 
-      {x, y} =
-        case side do
-          :top -> {position * @width, 0}
-          :bottom -> {position * @width, @height}
-          :left -> {0, position * @height}
-          :right -> {@width, position * @height}
-        end
-
       vx = :rand.uniform(@max_entity_speed)
       vy = :rand.uniform(@max_entity_speed)
+
+      {x, y, vx, vy} =
+        case side do
+          :top -> {position * @width, 0, pos_or_neg(vx), pos(vy)}
+          :bottom -> {position * @width, @height, pos_or_neg(vx), neg(vy)}
+          :left -> {0, position * @height, pos(vx), pos_or_neg(vy)}
+          :right -> {@width, position * @height, neg(vx), pos_or_neg(vy)}
+        end
 
       entity = %Entity{
         x: x,

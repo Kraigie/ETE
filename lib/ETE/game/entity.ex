@@ -3,7 +3,15 @@ defmodule ETE.Game.Entity do
   @width 50
 
   @derive Jason.Encoder
-  defstruct avatar: nil, x: 0, y: 0, height: @height, width: @width, vx: 0, vy: 0, speed: 5
+  defstruct show_hitboxes: false,
+            avatar: nil,
+            x: 0,
+            y: 0,
+            height: @height,
+            width: @width,
+            vx: 0,
+            vy: 0,
+            speed: 5
 
   def set_moving(%__MODULE__{speed: speed} = player, orientation) do
     case orientation do
@@ -41,6 +49,10 @@ defmodule ETE.Game.Entity do
     x = x + vx
     y = y + vy
     %{entity | x: x, y: y}
+  end
+
+  def toggle_hitbox(%__MODULE__{show_hitboxes: show} = player) do
+    %{player | show_hitboxes: !player.show_hitboxes}
   end
 
   def default_width do
