@@ -19,51 +19,58 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 
+function drawBig(canvas, ctx) {
+  let world = JSON.parse(canvas.dataset.world);
+  let players = world.players
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+  for(let player in players) {
+    let x = players[player].x
+    let y = players[player].y
+    let width = players[player].width
+    let height = players[player].height
+    ctx.drawImage(catMap[players[player].avatar], x - width * .25, y - height * .25, height * 1.5, width * 1.5)
+  }
+}
+
+function drawSmall(canvas, ctx) {
+  let world = JSON.parse(canvas.dataset.world);
+  let players = world.players
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+  for(let player in players) {
+    let x = players[player].x / 4
+    let y = players[player].y / 4
+    let width = players[player].width / 4
+    let height = players[player].height / 4
+    ctx.drawImage(catMap[players[player].avatar], x - width * .25, y - height * .25, height * 1.5, width * 1.5)
+  }
+}
+
 let hooks = {
   canvasMini: {
     mounted() {
       let canvas = this.el;
       let ctx = canvas.getContext("2d");
-      
-      let world = JSON.parse(canvas.dataset.world);
-      let players = world.players;
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      for(let player in players) {
-        let x = players[player].x / 5
-        let y = players[player].y / 5
-        let width = players[player].width / 5
-        let height = players[player].height / 5
-        
-        ctx.arc(x, y, width, 0, 2 * Math.PI);
-        ctx.stroke();
+      if (this.animationFrameRequest) {
+        cancelAnimationFrame(this.animationFrameRequest);
       }
+
+      drawSmall(canvas, ctx);
 
       Object.assign(this, { canvas, ctx });
     },
     updated() {
       let { canvas, ctx } = this;
       
-      let world = JSON.parse(canvas.dataset.world);
-      let players = world.players;
-
       if (this.animationFrameRequest) {
         cancelAnimationFrame(this.animationFrameRequest);
       }
 
       this.animationFrameRequest = requestAnimationFrame(() => {
         this.animationFrameRequest = undefined;
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-        for(let player in players) {
-          let x = players[player].x / 3
-          let y = players[player].y / 3
-          let width = players[player].width / 3
-          let height = players[player].height / 3
-
-          ctx.arc(x, y, width, 0, 2 * Math.PI);
-          ctx.stroke();
-        }
+        drawSmall(canvas, ctx);
       });
     }
   },
@@ -72,45 +79,20 @@ let hooks = {
       let canvas = this.el;
       let ctx = canvas.getContext("2d");
       
-      let world = JSON.parse(canvas.dataset.world);
-      let players = world.players;
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      for(let player in players) {
-        let x = players[player].x
-        let y = players[player].y
-        let width = players[player].width
-        let height = players[player].height
-        
-        ctx.arc(x, y, width, 0, 2 * Math.PI);
-        ctx.stroke();
-      }
+      drawBig(canvas, ctx);
 
       Object.assign(this, { canvas, ctx });
     },
     updated() {
       let { canvas, ctx } = this;
       
-      let world = JSON.parse(canvas.dataset.world);
-      let players = world.players
-
       if (this.animationFrameRequest) {
         cancelAnimationFrame(this.animationFrameRequest);
       }
 
       this.animationFrameRequest = requestAnimationFrame(() => {
         this.animationFrameRequest = undefined;
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-        for(let player in players) {
-          let x = players[player].x
-          let y = players[player].y
-          let width = players[player].width
-          let height = players[player].height
-
-          ctx.arc(x, y, width, 0, 2 * Math.PI)
-          ctx.stroke();
-        }
+        drawBig(canvas, ctx)
       });
     }
   }

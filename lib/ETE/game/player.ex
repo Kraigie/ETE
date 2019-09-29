@@ -1,9 +1,9 @@
 defmodule ETE.Game.Player do
-  @height 20
-  @width 20
+  @height 50
+  @width 50
 
   @derive Jason.Encoder
-  defstruct x: 0, y: 0, height: @height, width: @width, vx: 0, vy: 0, speed: 5
+  defstruct avatar: nil, x: 0, y: 0, height: @height, width: @width, vx: 0, vy: 0, speed: 5
 
   def set_moving(%__MODULE__{speed: speed} = player, orientation) do
     case orientation do
@@ -21,6 +21,10 @@ defmodule ETE.Game.Player do
       :left -> %{player | vx: 0}
       :right -> %{player | vx: 0}
     end
+  end
+
+  def set_avatar(%__MODULE__{} = player, avatar) do
+    %{player | avatar: avatar}
   end
 
   def move_player(%__MODULE__{} = player) do

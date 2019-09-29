@@ -17,8 +17,8 @@ defmodule ETE.Game.Server do
     GenServer.cast(via_tuple(game_id), {:add_connected, player_id, view_pid})
   end
 
-  def add_player(game_id, player_id) do
-    GenServer.cast(via_tuple(game_id), {:add_player, player_id})
+  def add_player(game_id, player_id, cat) do
+    GenServer.cast(via_tuple(game_id), {:add_player, player_id, cat})
   end
 
   def set_moving(game_id, player_id, orientation) do
@@ -75,8 +75,8 @@ defmodule ETE.Game.Server do
   end
 
   @impl true
-  def handle_cast({:add_player, player_id}, state) do
-    world = World.add_player(state.world, player_id)
+  def handle_cast({:add_player, player_id, cat}, state) do
+    world = World.add_player(state.world, player_id, cat)
     {:noreply, %{state | world: world}}
   end
 

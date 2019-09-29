@@ -17,13 +17,13 @@ defmodule ETE.Cat do
       name: "Jinx"
     },
     "karen" => %{
-      about: "Hellion that everyone hates to love.",
+      about: "Hellion that everyone hates to love. She'll suck on your ear if you let her.",
       img: "karen.png",
       name: "Karen"
     },
     "kitty" => %{
       about:
-        "He lays down when he eats, consumes his weight in food every day, and has the most annoying meow. He's my favorite",
+        "He lays down when he eats, consumes his weight in food every day, and has the most annoying meow. He's my favorite.",
       img: "kitty.png",
       name: "Kitty"
     },

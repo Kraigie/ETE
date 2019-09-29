@@ -11,10 +11,10 @@ defmodule ETE.Game.World do
     %__MODULE__{game_id: game_id}
   end
 
-  def add_player(%__MODULE__{players: players} = world, player_id) do
+  def add_player(%__MODULE__{players: players} = world, player_id, cat) do
     x_pos = Enum.random(Player.default_width()..@width)
     y_pos = Enum.random(Player.default_height()..@height)
-    player = %Player{x: x_pos, y: y_pos}
+    player = %Player{x: x_pos, y: y_pos, avatar: cat}
 
     players = Map.put(players, player_id, player)
 

@@ -13,6 +13,20 @@
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
       <%= render @view_module, @view_template, assigns %>
     </main>
+    <script type="text/javascript">
+
+      /* 
+        We can't use img.onload since we run into an issue where it looks like
+        the canvas is flicking. This mess that reminds me of a macro generates the
+        image elements when the page is loaded, alleviating that issue.
+      */
+      let catMap = {}
+      <%= for {key, cat} <- ETE.Cat.get_cat_map() do %>
+        let <%= key %> = new Image()
+        <%= key %>.src = "/images/<%= cat.img %>"
+        catMap["<%= key %>"] = <%= key %> 
+      <% end %>
+    </script>
     <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>

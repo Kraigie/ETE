@@ -1,27 +1,25 @@
 <div class="row">
   <h1 class="center-align z-depth-1">
-    ETE
+    Enjoy the End
   </h1>
 </div>
 <%= for {world, index} <- Enum.with_index(@games) do %>
   <%= if rem(index, 3) == 0 do %>
     <div class="row">
   <% end %>
-      <div class="col s4">
-        <div class="z-depth-2" >
+      <div class="col s4" style="text-align: center;">
           <canvas
-            style="height: 100%; width: 100%;"
+            class="z-depth-2"
             phx-click="join_game"
             phx-target="window"
             phx-value-id="<%= world.game_id %>"
             data-world="<%= Jason.encode! world %>"
             phx-hook="canvasMini"
-            width="<%= world.width / 3 %>"
-            height="<%= world.height / 3 %>"
+            width="<%= world.width / 4 %>"
+            height="<%= world.height / 4 %>"
           >
             Canvas is not supported!
           </canvas>
-        </div>
       </div>
   <%= if rem(index, 3) == 2 do %>
     </div>

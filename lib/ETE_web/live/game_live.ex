@@ -20,6 +20,7 @@ defmodule ETEWeb.GameLive do
       {:noreply, live_redirect(socket, to: "/404")}
     else
       ETE.Game.Server.add_connected(game_id, socket.id, self())
+
       socket =
         socket
         |> assign(game_id: game_id)
@@ -36,8 +37,8 @@ defmodule ETEWeb.GameLive do
   end
 
   @impl true
-  def handle_event("add_player", _event, socket) do
-    ETE.Game.Server.add_player(socket.assigns.game_id, socket.id)
+  def handle_event("add_player", %{"selected_cat" => cat}, socket) do
+    ETE.Game.Server.add_player(socket.assigns.game_id, socket.id, cat)
 
     socket =
       socket
