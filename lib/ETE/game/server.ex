@@ -33,6 +33,14 @@ defmodule ETE.Game.Server do
     GenServer.cast(via_tuple(game_id), {:toggle_hitboxes, player_id})
   end
 
+  def add_lucy(game_id, size) do
+    GenServer.cast(via_tuple(game_id), {:add_lucy, size})
+  end
+
+  def change_enemy_speed(game_id, speed) do
+    GenServer.cast(via_tuple(game_id), {:change_enemy_speed, speed})
+  end
+
   def get_world(pid) when is_pid(pid), do: GenServer.call(pid, :get_world)
   def get_world(id), do: GenServer.call(via_tuple(id), :get_world)
 
@@ -99,6 +107,18 @@ defmodule ETE.Game.Server do
   @impl true
   def handle_cast({:toggle_hitboxes, player_id}, state) do
     world = World.toggle_hitboxes(state.world, player_id)
+    {:noreply, %{state | world: world}}
+  end
+
+  @impl true
+  def handle_cast({:add_lucy, size}, state) do
+    world = World.add_lucy(state.world, size)
+    {:noreply, %{state | world: world}}
+  end
+
+  @impl true
+  def handle_cast({:change_enemy_speed, speed}, state) do
+    world = World.change_enemy_speed(state.world, speed)
     {:noreply, %{state | world: world}}
   end
 

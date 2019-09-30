@@ -82,8 +82,35 @@ defmodule ETEWeb.GameLive do
 
   @impl true
   def handle_event("toggle_hitboxes", _, %{assigns: %{show_hitboxes: show}} = socket) do
-    IO.inspect(show)
     {:noreply, assign(socket, show_hitboxes: !show)}
+  end
+
+  @impl true
+  def handle_event("add_lucy", _, socket) do
+    ETE.Game.Server.add_lucy(socket.assigns.game_id, :normal)
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("add_big_lucy", _, socket) do
+    ETE.Game.Server.add_lucy(socket.assigns.game_id, :big)
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("make_lucy_slower", _, socket) do
+    ETE.Game.Server.change_enemy_speed(socket.assigns.game_id, :slower)
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("make_lucy_faster", _, socket) do
+    ETE.Game.Server.change_enemy_speed(socket.assigns.game_id, :faster)
+
+    {:noreply, socket}
   end
 
   @impl true

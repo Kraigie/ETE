@@ -1,17 +1,15 @@
 defmodule ETE.Game.Entity do
-  @height 50
-  @width 50
-
   @derive Jason.Encoder
-  defstruct show_hitboxes: false,
+  defstruct id: nil,
+            show_hitboxes: false,
             avatar: nil,
             x: 0,
             y: 0,
-            height: @height,
-            width: @width,
+            height: 0,
+            width: 0,
             vx: 0,
             vy: 0,
-            speed: 5,
+            speed: 0,
             latest_x_movement: nil,
             latest_y_movement: nil,
             x_movement: [],
@@ -119,31 +117,24 @@ defmodule ETE.Game.Entity do
     %{player | avatar: avatar}
   end
 
-  def move_player(%__MODULE__{} = player) do
-    move(player)
+  def move_player(%__MODULE__{} = player, mod \\ 1) do
+    new_player = move(player, mod)
+
+    if ETE.Game.World.is_out_of_bounds?(new_player), do: player, else: new_player
   end
 
-  def move(%__MODULE__{x: x, y: y, vx: vx, vy: vy} = player) do
-    x = x + vx
-    y = y + vy
-    %{player | x: x, y: y}
+  def move_entity(%__MODULE__{} = entity, mod \\ 1) do
+    move(entity, mod)
   end
 
-  def move_entity(%__MODULE__{x: x, y: y, vx: vx, vy: vy} = entity) do
-    x = x + vx
-    y = y + vy
-    %{entity | x: x, y: y}
+  def move(%__MODULE__{x: x, y: y, vx: vx, vy: vy} = entity, mod) do
+    x = x + vx * mod
+    y = y + vy * mod
+
+    %{entity | x: x, y: y, vx: vx, vy: vy}
   end
 
   def toggle_hitbox(%__MODULE__{show_hitboxes: show} = player) do
     %{player | show_hitboxes: !show}
-  end
-
-  def default_width do
-    @width
-  end
-
-  def default_height do
-    @height
   end
 end

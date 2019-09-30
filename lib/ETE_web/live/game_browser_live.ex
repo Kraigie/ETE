@@ -7,6 +7,7 @@ defmodule ETEWeb.GameBrowserLive do
 
   @tick 33
 
+  @impl true
   def render(assigns) do
     ETEWeb.GameBrowserView.render("game_browser.html", assigns)
   end

@@ -14,29 +14,34 @@
             <%= cat.about %>
           </div>
           <div class="card-action">
-            <a phx-click="add_player" class="btn cat blue-grey blue-grey-text text-lighten-4" phx-value-selected_cat="<%= key %>" href="#">Pick Me!</a>
+            <a phx-click="add_player" class="btn cat blue-grey blue-grey-text lighten-1 text-lighten-4" phx-value-selected_cat="<%= key %>" href="#">Pick Me!</a>
           </div>
         </div>
       </div>
     <% end %>
   </div>
 <% else %>
-  <div class="row" style="">
-    <div class="col m3">
+  <div class="row">
+    <div class="col m5">
         <button phx-click="redirect_to_main" class="btn blue-grey z-depth-1 blue-grey-text text-lighten-5"><i class="material-icons left">arrow_back</i>Back to game browser</button>
     </div>
+    <div class="col m2">
     <%= if is_dead?(@world, @player_id) do %>
-      <div class="col m3">
-        <button phx-click="rejoin" class="btn blue-grey z-depth-1 blue-grey-text text-lighten-5">Rejoin!</button>
-      </div>
+      <button phx-click="rejoin" class="btn blue-grey z-depth-1 blue-grey-text text-lighten-5">Rejoin!</button>
     <% end %>
+    </div>
+    <div class="col m5 offset-s7 blue-grey-text text-lighten-4">
+      tick: <%= @world.tick %>
+      <br>
+      id: <%= @game_id %>
+    </div>
   </div>
   <div class="row" style="">
     <div class="col s7">
-      <canvas 
+      <canvas
       class="z-depth-3 blue-grey darken-2"
       style="width: 100%; height: 100%;"
-      phx-keydown="move_player" 
+      phx-keydown="move_player"
       phx-keyup="stop_player"
       phx-target="window"
       data-world="<%= Jason.encode! @world %>"
@@ -52,17 +57,22 @@
     <div class="col s5">
       <div class="row">
         <div class="col s12">
-          <button class="z-depth-1 btn">Hello world</button>
+          <button phx-click="add_lucy" phx-throttle="50" class="blue-grey z-depth-1 btn">Add a Lucy</button>
         </div>
       </div>
       <div class="row">
         <div class="col s12">
-          <button class="z-depth-1 btn">Hello world</button>
+          <button phx-click="add_big_lucy" phx-throttle="250" class="blue-grey z-depth-1 btn">Add a BIG Lucy</button>
         </div>
       </div>
       <div class="row">
         <div class="col s12">
-          <button class="z-depth-1 btn">Hello world</button>
+          <button phx-click="make_lucy_faster" phx-throttle="500" class="blue-grey z-depth-1 btn"><strong>Make things generally faster</strong></button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <button phx-click="make_lucy_slower" phx-throttle="500" class="blue-grey z-depth-1 btn"><small>Make things generally slower</small></button>
         </div>
       </div>
     </div>
@@ -70,7 +80,7 @@
   <div class="row" style="">
     <div class="col s12">
       <button class="z-depth-1 btn blue-grey" phx-click="toggle_hitboxes">
-      <%= if show_hitbox?(@world, @player_id) do %>
+      <%= if @show_hitboxes do %>
         <input type="checkbox" class="btn z-depth-1 filled-in blue-grey" checked="checked"><span class="blue-grey-text text-lighten-4">Show hitboxes</span>
       <% else %>
         <input type="checkbox" class="btn z-depth-1 filled-in blue-grey"><span class="blue-grey-text text-lighten-4">Show hitboxes</span>
