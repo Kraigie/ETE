@@ -1,40 +1,28 @@
-# (App Name Here)
+# ETE
 
 This is my entry in [Phoenix Phrenzy](https://phoenixphrenzy.com), showing off what [Phoenix](https://phoenixframework.org/) and [LiveView](https://github.com/phoenixframework/phoenix_live_view) can do.
 
-![App Name Here preview](assets/static/images/preview.gif "App Name Here")
+![ETE](assets/static/images/preview.gif "Enjoy The End")
+
+## About
+ETE utilizes the canvas element (for better or for worse) to render a simple little game
+I created centered around most of the animals in my life. The name ETE, or Enjoy the End,
+is based loosely off of a concept from a manga I read called *Gigant*.
+
+In *Gigant* there is an app available to everyone that can be used to vote on outlandish
+things that will happen in the real world. The events are usually sinister in nature, playing on the
+idea that humans are actually cruel beings who want to watch the world burn.
 
 # Attributions
-All pictures of the kittens were taken by me, and edited by Andris#2694 on Discord.
+All pictures of the kittens were taken by me and edited by Andris#2694 on Discord.
 
 The vector of the mouse is part of the public domain. It was found [here](https://publicdomainvectors.org/en/free-clipart/Vector-drawing-of-mouse-with-pink-ears/22307.html) on publicdomainvectors.org which is located [here](https://publicdomainvectors.org/).
 
-# Phrenzy Instructions
 
-Fork this repo and start build an application! See [Phoenix Phrenzy](https://phoenixphrenzy.com) for details.
+## Resources
+[This](http://www.petecorey.com/blog/2019/09/02/animating-a-canvas-with-phoenix-liveview/) blog post by Pete Corey for setting up JS interop.
 
-Note: for development, you'll need Elixir, Erlang and Node.js. If you use the [asdf version manager](https://github.com/asdf-vm/asdf) and install the [relevant plugins](https://asdf-vm.com/#/plugins-all?id=plugin-list), you can install the versions specified in `.tool-versions` with `asdf install`.
-
-
-## Deployment
-
-How you deploy your app is up to you. A couple of the easiest options are:
-
-- Heroku ([instructions](https://hexdocs.pm/phoenix/heroku.html))
-- [Gigalixir](https://gigalixir.com/) (doesn't limit number of connections)
-
-## The Usual README Content
-
-To start your Phoenix server:
-
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.setup`
-  * Install Node.js dependencies with `cd assets && npm install`
-  * Start Phoenix endpoint with `mix phx.server`
-
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
-
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+[Materialize](https://materializecss.com/) for styling.
 
 ## Learn more
 

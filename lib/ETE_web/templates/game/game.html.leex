@@ -77,12 +77,14 @@
       </div>
       <div class="row">
         <div class="col s6">
-          <ul style="border: none" class="collection with-header z-depth-1 blue-grey blue-grey-text text-lighten-4">
-            <li class="blue-grey blue-grey-text text-lighten-4 collection-header"><h4>Current Scores</h4></li>
-            <%= for {id, player} <- @world.players do %>
-              <li class="collection-item blue-grey blue-grey-text text-lighten-4"><%= id %><%= if player.id == @player_id, do: " (You)"%>:  <%= player.score %></li>
-            <% end %>
-          </ul>
+          <%= if map_size(@world.players) > 0 do %>
+            <ul style="border: none" class="collection with-header z-depth-1 blue-grey blue-grey-text text-lighten-4">
+              <li class="blue-grey blue-grey-text text-lighten-4 collection-header"><h4>Current Scores</h4></li>
+              <%= for {id, player} <- @world.players do %>
+                <li class="collection-item blue-grey blue-grey-text text-lighten-4"><%= id %><%= if player.id == @player_id, do: " (You)"%>:  <%= player.score %></li>
+              <% end %>
+            </ul>
+          <%= end %>
         </div>
         <div class="col s6">
           <ul style="border: none" class="collection with-header z-depth-1 blue-grey blue-grey-text text-lighten-4">

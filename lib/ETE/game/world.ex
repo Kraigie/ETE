@@ -4,7 +4,7 @@ defmodule ETE.Game.World do
 
   @width 800
   @height 800
-  @max_entity_count 0
+  @max_entity_count 4
   @speed 5
   @entity_height 50
   @entity_width 50
@@ -223,10 +223,10 @@ defmodule ETE.Game.World do
 
     high_scores =
       players
-      |> Enum.map(fn {k, v} -> v end)
+      |> Enum.map(fn {_k, v} -> v end)
       |> Kernel.++(high_scores)
       |> Enum.sort(&(&1.score >= &2.score))
-      |> Enum.uniq(fn player -> player.id end)
+      |> Enum.uniq_by(fn player -> player.id end)
       |> Enum.take(10)
 
     %{world | tick: tick + 1, players: players, high_scores: high_scores}
