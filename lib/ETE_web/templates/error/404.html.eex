@@ -1,5 +1,7 @@
 <figure style="vertical-align: top; display: block; text-align: center;">
+  <h1 class="blue-grey-text text-lighten-4">This is an error page</h1>
   <% {_k, cat} = Enum.random(ETE.Cat.get_cat_map()) %>
   <img src="/images/<%=cat.img%>">
-  <figcaption style="display: block;"><%= cat.about %></figcaption>
+  <figcaption class="blue-grey-text text-lighten-4" style="display: block;"><%= cat.about %></figcaption>
+  <a href="/" style="margin-top: 5%" class="btn blue-grey-text text-lighten-4 blue-grey z-depth-1">Click here to return to game directory</a>
 </figure>
