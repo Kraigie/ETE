@@ -1,7 +1,41 @@
 <div class="row">
-  <h1 class="center-align z-depth-1 blue-grey blue-grey-text text-lighten-4 ">
+  <h1 class="col m12 center-align z-depth-1 blue-grey blue-grey-text text-lighten-4 ">
     Enjoy the End
   </h1>
+  <button phx-click="toggle_about" class="btn blue-grey blue-grey-text text-lighten-4">About</button>
+  <%= if @show_about do %>
+    <div phx-click="hide_about" class="z-depth-1 blue-grey scale-transition scale-in" style="position: fixed; margin-top: 15px; border-radius: 2px; max-width: 50%">
+  <% else %>
+    <div class="z-depth-1 blue-grey scale-transition scale-out" style="position: fixed; margin-top: 15px; border-radius: 2px; max-width: 50%">
+  <% end %>
+    <p style="margin: 1%;" class="blue-grey-text text-lighten-4">
+      Hi, my name is Craig. ETE is my entry into
+      <a class="blue-grey-text text-lighten-5" href="https://phoenixphrenzy.com/">Phoenix Phrenzy</a>,
+      a competition hosted by <a class="blue-grey-text text-lighten-5" href="https://phoenixphrenzy.com/">DockYard</a>
+      where the goal is to build something using a newer technology called
+      <a class="blue-grey-text text-lighten-5" href="https://github.com/phoenixframework/phoenix_live_view">Phoenix LiveView</a>.
+      LiveView is neat because it allows you to build UI's that are predominately controlled on the server.
+      <br>
+      <br>
+      ETE utilizes the canvas element (for better or for worse) to render a simple little game
+      I created centered around most of the animals in my life. The name ETE, or Enjoy the End,
+      is based loosely off of a concept from a manga I read called <i>Gigant</i>. The whole idea
+      is that there is an app on everyone's phone where people can vote to have outlandish
+      things happen in the real world. The events are usually sinister in nature, playing on the
+      idea that humans are actually cruel beings who want to watch the world burn.
+      <br>
+      <br>
+      How to play: <br>
+      The screen you're currently on is a listing of servers. You can click on any server here to join, or
+      create a new one. <br>
+      You will be prompted to pick a character (I recommend Kitty, just look at those cheeks!), and after
+      doing so will be put in the game.<br>
+      Right now you can only move using the arrow keys. If you touch the dog you'll die and have to pick a
+      new character if you want to play again.<br>
+      Using the buttons on the side will affect the game in different ways. Try not to be too evil ;).
+    </p>
+
+  </div>
 </div>
 <%= for {world, index} <- Enum.with_index(@games) do %>
   <%= if rem(index, 3) == 0 do %>
