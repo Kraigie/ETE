@@ -17,7 +17,8 @@ defmodule ETE.Game.World do
             game_id: nil,
             tick: 0,
             entity_counter: 0,
-            speed_modifier: 1.0
+            speed_modifier: 1.0,
+            high_scores: %{}
 
   def new(game_id) do
     %__MODULE__{game_id: game_id}
@@ -171,7 +172,7 @@ defmodule ETE.Game.World do
         :top -> {position * @width, 0 - height + 1, pos_or_neg(vx), pos(vy)}
         :bottom -> {position * @width, @height, pos_or_neg(vx), neg(vy)}
         :left -> {0 - width + 1, position * @height, pos(vx), pos_or_neg(vy)}
-        :right -> IO.inspect({@width, position * @height, neg(vx), pos_or_neg(vy)})
+        :right -> {@width, position * @height, neg(vx), pos_or_neg(vy)}
       end
 
     x = Keyword.get(opts, :x, x)
@@ -214,7 +215,22 @@ defmodule ETE.Game.World do
       entity.y < 0 - entity.height
   end
 
-  defp update_tick(%__MODULE__{tick: tick} = world), do: %{world | tick: tick + 1}
+  defp update_tick(%__MODULE__{tick: tick, players: players, high_scores: high_scores} = world) do
+    players =
+      players
+      |> Enum.map(fn {id, player} -> {id, Entity.add_points(player)} end)
+      |> Enum.into(%{})
+
+    high_scores =
+      players
+      |> Enum.map(fn {k, v} -> v end)
+      |> Kernel.++(high_scores)
+      |> Enum.sort(&(&1.score >= &2.score))
+      |> Enum.uniq(fn player -> player.id end)
+      |> Enum.take(10)
+
+    %{world | tick: tick + 1, players: players, high_scores: high_scores}
+  end
 
   def default_speed() do
     @speed

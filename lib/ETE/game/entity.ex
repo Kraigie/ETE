@@ -13,7 +13,8 @@ defmodule ETE.Game.Entity do
             latest_x_movement: nil,
             latest_y_movement: nil,
             x_movement: [],
-            y_movement: []
+            y_movement: [],
+            score: 0
 
   def set_moving(%__MODULE__{speed: speed} = player, orientation) do
     # We need to use Enum.uniq here because we sometimes get multiple key_down's in
@@ -111,6 +112,10 @@ defmodule ETE.Game.Entity do
           %{player | x_movement: x_movement, latest_x_movement: :doleftwn}
         end
     end
+  end
+
+  def add_points(%__MODULE__{score: p} = player, points \\ 1) do
+    %{player | score: p + points}
   end
 
   def set_avatar(%__MODULE__{} = player, avatar) do

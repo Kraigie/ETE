@@ -20,7 +20,7 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 
 function doEntityDrawsBig(ctx, entities, show) {
-  
+
   for(let entity in entities) {
     let x = entities[entity].x;
     let y = entities[entity].y;
@@ -56,7 +56,7 @@ function draw(canvas, ctx, size) {
   let entities = world.entities;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
+
   if(size == "big"){
     doEntityDrawsBig(ctx, players, show_hitboxes);
     doEntityDrawsBig(ctx, entities, show_hitboxes)
@@ -79,7 +79,7 @@ let hooks = {
     },
     updated() {
       let { canvas, ctx } = this;
-      
+
       if (this.animationFrameRequest) {
         cancelAnimationFrame(this.animationFrameRequest);
       }
@@ -101,7 +101,7 @@ let hooks = {
     },
     updated() {
       let { canvas, ctx } = this;
-      
+
       if (this.animationFrameRequest) {
         cancelAnimationFrame(this.animationFrameRequest);
       }

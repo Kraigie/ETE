@@ -75,15 +75,33 @@
           <button phx-click="make_lucy_slower" phx-throttle="500" class="blue-grey z-depth-1 btn"><small>Make things generally slower</small></button>
         </div>
       </div>
+      <div class="row">
+        <div class="col s6">
+          <ul style="border: none" class="collection with-header z-depth-1 blue-grey blue-grey-text text-lighten-4">
+            <li class="blue-grey blue-grey-text text-lighten-4 collection-header"><h4>Current Scores</h4></li>
+            <%= for {id, player} <- @world.players do %>
+              <li class="collection-item blue-grey blue-grey-text text-lighten-4"><%= id %><%= if player.id == @player_id, do: " (You)"%>:  <%= player.score %></li>
+            <% end %>
+          </ul>
+        </div>
+        <div class="col s6">
+          <ul style="border: none" class="collection with-header z-depth-1 blue-grey blue-grey-text text-lighten-4">
+            <li class="blue-grey blue-grey-text text-lighten-4 collection-header"><h4>High Scores</h4></li>
+            <%= for player <- @world.high_scores do %>
+              <li class="collection-item blue-grey blue-grey-text text-lighten-4"><%= player.id %><%= if player.id == @player_id, do: " (You)"%>:  <%= player.score %></li>
+            <% end %>
+          </ul>
+        </div>
+      <div>
     </div>
   </div>
   <div class="row" style="">
     <div class="col s12">
-      <button class="z-depth-1 btn blue-grey" phx-click="toggle_hitboxes">
+      <button class="z-depth-1 btn blue-grey blue-grey-text text-lighten-4" phx-click="toggle_hitboxes">
       <%= if @show_hitboxes do %>
-        <input type="checkbox" class="btn z-depth-1 filled-in blue-grey" checked="checked"><span class="blue-grey-text text-lighten-4">Show hitboxes</span>
+        <input type="checkbox" class="btn z-depth-1 filled-in checkbox-blue-grey" checked="checked"><span class="blue-grey-text text-lighten-4">Show hitboxes</span>
       <% else %>
-        <input type="checkbox" class="btn z-depth-1 filled-in blue-grey"><span class="blue-grey-text text-lighten-4">Show hitboxes</span>
+        <input type="checkbox" class="btn z-depth-1 filled-in checkbox-blue-grey"><span class="blue-grey-text text-lighten-4">Show hitboxes</span>
       <% end %>
     </div>
   </div>

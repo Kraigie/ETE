@@ -2,3 +2,9 @@
 
 @import "./materialize.min.css";
 @import "../../deps/phoenix_live_view/assets/css/live_view.css";
+
+.checkbox-blue-grey[type="checkbox"].filled-in:checked + span:not(.lever):after
+{
+    border: 2px solid #cfd8dc;
+    background-color: #cfd8dc;
+}
