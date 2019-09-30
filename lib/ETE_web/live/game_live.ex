@@ -1,6 +1,8 @@
 defmodule ETEWeb.GameLive do
   use Phoenix.LiveView
 
+  alias ETEWeb.Router.Helpers, as: Routes
+
   @registry ETE.GameBrowser.Registry
 
   @impl true
@@ -25,7 +27,9 @@ defmodule ETEWeb.GameLive do
         socket
         |> assign(game_id: game_id)
         |> assign(show_picker: true)
+        |> assign(socket: socket)
         |> assign(player_id: socket.id)
+        |> assign(show_hitboxes: false)
         |> put_world(game_id)
 
       {:noreply, socket}
@@ -35,6 +39,17 @@ defmodule ETEWeb.GameLive do
   @impl true
   def handle_info({:render, world}, socket) do
     {:noreply, put_world(socket, world)}
+  end
+
+  @impl true
+  def handle_event("redirect_to_main", _key, socket) do
+    {:noreply, live_redirect(socket, to: Routes.live_path(socket, ETEWeb.GameBrowserLive))}
+  end
+
+  @impl true
+  def handle_event("rejoin", _key, socket) do
+    {:noreply,
+     live_redirect(socket, to: Routes.live_path(socket, ETEWeb.GameLive, socket.assigns.game_id))}
   end
 
   @impl true
@@ -66,10 +81,9 @@ defmodule ETEWeb.GameLive do
   end
 
   @impl true
-  def handle_event("toggle_hitboxes", _, socket) do
-    ETE.Game.Server.toggle_hitboxes(socket.assigns.game_id, socket.id)
-
-    {:noreply, socket}
+  def handle_event("toggle_hitboxes", _, %{assigns: %{show_hitboxes: show}} = socket) do
+    IO.inspect(show)
+    {:noreply, assign(socket, show_hitboxes: !show)}
   end
 
   @impl true

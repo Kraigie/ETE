@@ -65,15 +65,6 @@ defmodule ETE.Game.World do
     else
       world
     end
-
-    player =
-      players
-      |> Map.get(player_id)
-      |> Entity.toggle_hitbox()
-
-    players = Map.put(players, player_id, player)
-
-    %{world | players: players}
   end
 
   def next_tick(%__MODULE__{} = world) do
@@ -163,7 +154,8 @@ defmodule ETE.Game.World do
   end
 
   defp is_out_of_bounds(entity) do
-    entity.x >= @width or entity.x <= 0 or entity.y >= @height or entity.y <= 0
+    entity.x >= @width or entity.x <= 0 - Entity.default_width() or entity.y >= @height or
+      entity.y <= 0 - Entity.default_height()
   end
 
   defp update_tick(%__MODULE__{tick: tick} = world), do: %{world | tick: tick + 1}

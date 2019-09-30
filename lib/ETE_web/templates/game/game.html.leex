@@ -1,27 +1,37 @@
 <%= if @show_picker do %>
   <div class="row valign-wrapper">
-    <h1>Choose your fighter</h1>
+    <h1 class="blue-grey-text text-lighten-4">Choose your fighter</h1>
   </div>
   <div class="row">
     <%= for {key, cat} <- ETE.Cat.get_cat_map() do %>
       <div class="col s3">
-        <div class="card large teal">
-          <div class="card-image grey">
+        <div class="card z-depth-5 large blue-grey darken-1">
+          <div class="card-image blue-grey darken-2">
             <img src="/images/<%=cat.img%>">
-            <span class="card-title"><%= cat.name %></span>
+            <span class="card-title blue-grey-text text-lighten-4"><%= cat.name %></span>
           </div>
-          <div class="card-content teal">
+          <div class="card-content blue-grey darken-1 blue-grey-text text-lighten-4">
             <%= cat.about %>
           </div>
           <div class="card-action">
-            <a phx-click="add_player" class="cat" phx-value-selected_cat="<%= key %>" href="#">Pick Me!</a>
+            <a phx-click="add_player" class="btn cat blue-grey blue-grey-text text-lighten-4" phx-value-selected_cat="<%= key %>" href="#">Pick Me!</a>
           </div>
         </div>
       </div>
     <% end %>
   </div>
 <% else %>
-  <div class="row" style="margin: 5%">
+  <div class="row" style="">
+    <div class="col m3">
+        <button phx-click="redirect_to_main" class="btn blue-grey z-depth-1 blue-grey-text text-lighten-5"><i class="material-icons left">arrow_back</i>Back to game browser</button>
+    </div>
+    <%= if is_dead?(@world, @player_id) do %>
+      <div class="col m3">
+        <button phx-click="rejoin" class="btn blue-grey z-depth-1 blue-grey-text text-lighten-5">Rejoin!</button>
+      </div>
+    <% end %>
+  </div>
+  <div class="row" style="">
     <div class="col s7">
       <canvas 
       class="z-depth-3"
@@ -31,6 +41,7 @@
       phx-target="window"
       data-world="<%= Jason.encode! @world %>"
       data-id="<%= @player_id %>"
+      data-show_hitboxes="<%= @show_hitboxes %>"
       phx-hook="canvas"
       height="<%= @world.height %>"
       width="<%= @world.width %>"
@@ -56,7 +67,7 @@
       </div>
     </div>
   </div>
-  <div class="row" style="margin: 5%;">
+  <div class="row" style="">
     <div class="col s12">
       <button class="z-depth-1 btn blue-grey" phx-click="toggle_hitboxes">
       <%= if show_hitbox?(@world, @player_id) do %>

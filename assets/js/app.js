@@ -27,6 +27,7 @@ function doEntityDrawsBig(ctx, entities, show) {
     let width = entities[entity].width;
     let height = entities[entity].height;
 
+
     ctx.drawImage(catMap[entities[entity].avatar], x - width * .25, y - height * .25, height * 1.5, width * 1.5);
     if(show) {
       ctx.beginPath();
@@ -49,6 +50,7 @@ function doEntityDrawsSmall(ctx, entities) {
 function draw(canvas, ctx, size) {
   let world = JSON.parse(canvas.dataset.world);
   let player_id = canvas.dataset.id;
+  let show_hitboxes = canvas.dataset.show_hitboxes ? JSON.parse(canvas.dataset.show_hitboxes) : canvas.dataset.show_hitboxes;
   let players = world.players;
 
   let entities = world.entities;
@@ -56,8 +58,8 @@ function draw(canvas, ctx, size) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   
   if(size == "big"){
-    doEntityDrawsBig(ctx, players, players[player_id] ? players[player_id].show_hitboxes : false);
-    doEntityDrawsBig(ctx, entities, players[player_id] ? players[player_id].show_hitboxes : false)
+    doEntityDrawsBig(ctx, players, show_hitboxes);
+    doEntityDrawsBig(ctx, entities, show_hitboxes)
   }
   else {
     doEntityDrawsSmall(ctx, players);

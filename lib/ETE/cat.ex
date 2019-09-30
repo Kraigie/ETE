@@ -14,7 +14,7 @@ defmodule ETE.Cat do
       name: "Hazel"
     },
     "jinx" => %{
-      about: "SMALL, CUTE litle girl. Afraid of everything.",
+      about: "Small, CUTE litle girl. Afraid of everything.",
       img: "jinx.png",
       name: "Jinx"
     },
@@ -30,7 +30,7 @@ defmodule ETE.Cat do
       name: "Kitty"
     },
     "lucy" => %{
-      about: "A dog. Lucy is your girl if you don't want to play; she just likes to watch too.",
+      about: "A dog. She's a bag girl. Pick Lucy if you want to be a BAD girl.",
       img: "lucy.png",
       name: "Lucy"
     },
@@ -43,7 +43,7 @@ defmodule ETE.Cat do
     "mouse" => %{
       about: "Wait a minute...",
       img: "mouse.svg",
-      name: "Rat"
+      name: ""
     },
     "red" => %{
       about: "He's a good boy.",
